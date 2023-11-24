@@ -7,4 +7,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  #Format per escriure les rutes -> get "url/url/url", to:"nomControlladorSenseParaulaController#nomFuncio"
 end
