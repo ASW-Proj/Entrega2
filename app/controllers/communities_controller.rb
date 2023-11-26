@@ -10,6 +10,9 @@ class CommunitiesController < ApplicationController
               identifier: community.identifier,
               name: community.name,
               community_avatar: community.community_avatar.attached? ? url_for(community.community_avatar) : nil,
+              num_posts: community.posts.count,
+              num_comments: community.comments.count,
+              num_subscribers: community.subscriptions.count,
               created_at: community.created_at,
               updated_at: community.updated_at,
             }
