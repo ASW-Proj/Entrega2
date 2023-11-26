@@ -3,6 +3,8 @@ class CommunitiesController < ApplicationController
     # GET /communities.json
     def index
         @communities = Community.all.order(name: :asc)
+
+        render json: { communities: @communities }, status: :ok
     end
     
     # POST /communities.json
