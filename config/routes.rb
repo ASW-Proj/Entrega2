@@ -10,5 +10,7 @@ Rails.application.routes.draw do
 
   #Format per escriure les rutes -> get "url/url/url", to:"nomControlladorSenseParaulaController#nomFuncio"
 
+  # constraints -> (request) {request.format == :json} do        ...     end
   get "/communities", to: "communities#index"
+  post "/communities", to: "communities#create"
 end
