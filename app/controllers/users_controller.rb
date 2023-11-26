@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
     # GET /users
     def index
-        @communities = User.all.order(name: :asc)
+        @users = User.all.order(name: :asc)
 
         users_json = @users.map do |user|
             {
