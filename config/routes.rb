@@ -9,4 +9,6 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   #Format per escriure les rutes -> get "url/url/url", to:"nomControlladorSenseParaulaController#nomFuncio"
+
+  get "/communities", to: "communities#index"
 end
