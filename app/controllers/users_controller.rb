@@ -23,7 +23,7 @@ class UsersController < ApplicationController
     # POST /users
     def create
         # Creates an instance of user
-        @user = User.new(community_params)
+        @user = User.new(user_params)
 
         # Save it in DB
         if @user.save
