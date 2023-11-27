@@ -8,4 +8,7 @@ Rails.application.routes.draw do
   # Communities
   get "/communities", to: "communities#index"
   post "/communities", to: "communities#create"
+
+  # Posts
+  post "/posts", to: "posts#create"
 end
