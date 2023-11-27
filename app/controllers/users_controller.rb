@@ -29,10 +29,12 @@ class UsersController < ApplicationController
         if @user.save
             render json: {
               message: 'User created successfully',
-              community: {
+              user: {
                 username: @user.username,
                 name:  @user.name,
                 bio: @user.bio,
+                user_avatar: @user.user_avatar ,
+                user_banner: @user.user_banner,
                 created_at: @user.created_at,
                 updated_at: @user.updated_at
               }
@@ -47,6 +49,6 @@ class UsersController < ApplicationController
     private
         # Only allow a list of trusted parameters through.
         def user_params
-            params.require(:user).permit(:username, :name, :bio)
+            params.require(:user).permit(:username, :name, :bio, :user_avatar, :user_banner)
         end
 end
