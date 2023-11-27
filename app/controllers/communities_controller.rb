@@ -2,8 +2,20 @@ class CommunitiesController < ApplicationController
 
     # GET /communities
     def index
-        @communities = Community.all.order(name: :asc)
+        # If a query param called user_id is present, obtain the communities
+        # where the user with that user_id is subscribed (filter)
+        if params[:user_id].present?
+            user_id = params[:user_id]
+            @communities = Community
+                             .joins(:subscriptions)
+                             .where(subscriptions: { user_id: user_id })
+                             .order(name: :asc)
+        # Else get communities ordered by name
+        else
+            @communities = Community.all.order(name: :asc)
+        end
 
+        # The json to add to the response
         communities_json = @communities.map do |community|
             {
               id: community.id,
@@ -18,6 +30,7 @@ class CommunitiesController < ApplicationController
             }
         end
 
+        # The response
         render json: { communities: communities_json }, status: :ok
     end
 
