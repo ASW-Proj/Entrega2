@@ -4,15 +4,40 @@ class CommentsController < ApplicationController
   def index
     @comments = Comment.all
 
-    if params[:subscribe].present?
-      subs = params[:subscribe]
-      case subs
-      when 'subscribed'
-        @comments = @comments.order(created_at: :desc)
-      else
-        @comments = @comments.order(created_at: :asc)
-      end
+    # Buscamos los comentarios por body
+    if params[:search].present?
+      value = params[:search]
+      @comments = @comments.where('body LIKE ?', "%#{value}%")
     end
+
+    # Filtramos los comentarios
+    if params[:filter].present?
+        if params[:user_id].present?
+          user_id = params[:user_id]
+          subs = params[:filter]
+          case subs
+          when 'subscribed'
+              @comments = Comment.joins(:community, community: :subscriptions)
+                                 .where(subscriptions: { user_id: user_id })
+                                 .order('comments.created_at DESC')
+          when 'created'
+              @comments = Comment.where( user_id: user_id )
+                               .order('comments.created_at DESC')
+          when 'saved'
+              @comments = Comment.joins(:saved_comments)
+                             .where(saved_comments: { user_id: user_id })
+                             .order('comments.created_at DESC')
+          end
+        else
+        #si no hay user id no podemos hacer ninguno de los filtros
+          render json: {
+            errors: "Mismatch user_id"
+          }, status: :unprocessable_entity
+          return
+        end
+    end
+
+    # Ordenamos los comentarios
     if params[:order].present?
       order = params[:order]
       case order
@@ -22,12 +47,6 @@ class CommentsController < ApplicationController
         @comments = @comments.order(created_at: :asc)
       end
     end
-    if params[:search].present?
-      value = params[:search]
-      @comments = @comments.where('body LIKE ?', "%#{value}%")
-    end
-
-
 
     comments_json = @comments.map do |comment|
       {
@@ -41,7 +60,6 @@ class CommentsController < ApplicationController
 
     render json: { comments: comments_json }, status: :ok
   end
-
 
 
 
