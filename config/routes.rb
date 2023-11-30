@@ -37,4 +37,12 @@ Rails.application.routes.draw do
     post "/comment/:comment_id/save/:user_id", to: "saved_comments#save"
     delete "/comment/:comment_id/save/:user_id", to: "saved_comments#unsave"
 
+    # Liked posts
+    post "/post/:post_id/like/:user_id", to: "post_likes#like"
+    delete "/post/:post_id/like/:user_id", to: "post_likes#unlike"
+
+    # Liked comments
+    post "/comment/:comment_id/like/:user_id", to: "comment_likes#like"
+    delete "/comment/:comment_id/like/:user_id", to: "comment_likes#unlike"
+
 end
