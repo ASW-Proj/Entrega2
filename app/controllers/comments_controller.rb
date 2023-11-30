@@ -2,20 +2,25 @@ class CommentsController < ApplicationController
 
   # GET /comments or /comments.json
   def index
-    @comments = Comment.all
+
+    order_param = params[:order]
+    case order_param
+        when 'recent'
+          @comments = Comment.all.order(created_at: :desc)
+        when 'oldest'
+          @comments = Comment.all.order(created_at: :asc)
+        end
     post = params[:post]
     user = params[:user]
-    if post != nil && user != nil
-      @comments = Comment.all
-    elsif post != nil
+    if post != nil and user = nil
       if post.where(id: post).exists?
-        @comments = Comment.where(post_id: post).order(created_at: :desc)
+        @comments =@comments.where(post_id: post)
       else
         render :json => { "status" => "404", "error" => "This post does not exist." }, status: :not_found and return
       end
     elsif user != nil
       if User.where(id: user).exists?
-        @comments = Comment.where(user_id: user).order(created_at: :desc)
+        @comments = @comments.where(user_id: user)
       else
         render :json => { "status" => "404", "error" => "This user does not exist." }, status: :not_found and return
       end
