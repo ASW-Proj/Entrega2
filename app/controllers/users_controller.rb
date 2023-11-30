@@ -6,6 +6,7 @@ class UsersController < ApplicationController
 
         users_json = @users.map do |user|
             {
+              user_id:  user.id,
               username: user.username,
               name: user.name,
               bio: user.bio,
@@ -50,6 +51,6 @@ class UsersController < ApplicationController
     private
         # Only allow a list of trusted parameters through.
         def user_params
-            params.require(:user).permit(:username, :name, :bio, :user_avatar, :user_banner, :email)
+            params.permit(:user).permit(:username, :name, :bio, :user_avatar, :user_banner, :email)
         end
 end

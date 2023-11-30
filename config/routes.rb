@@ -10,9 +10,13 @@ Rails.application.routes.draw do
   # Communities
   get "/communities", to: "communities#index"
   post "/communities", to: "communities#create"
+
   get "/users", to: "users#index"
   post "/users", to: "users#create"
 
+  get "/comments", to: "comments#index"
+  post "/comments", to: "comments#create"
 
-  root 'users#index' #, defaults: { format: :html }
+
+  root 'comments#index' #, defaults: { format: :html }
 end
