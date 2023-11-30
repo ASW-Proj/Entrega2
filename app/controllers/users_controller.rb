@@ -6,12 +6,12 @@ class UsersController < ApplicationController
 
         users_json = @users.map do |user|
             {
-              username: user.username,
-              name: user.name,
-              bio: user.bio,
-              created_at: user.created_at,
-              updated_at: user.updated_at,
-
+                id: user.id,
+                username: user.username,
+                name: user.name,
+                bio: user.bio,
+                created_at: user.created_at,
+                updated_at: user.updated_at,
             }
         end
 
@@ -28,16 +28,16 @@ class UsersController < ApplicationController
         # Save it in DB
         if @user.save
             render json: {
-              message: 'User created successfully',
-              user: {
-                username: @user.username,
-                name:  @user.name,
-                bio: @user.bio,
-                user_avatar: @user.user_avatar ,
-                user_banner: @user.user_banner,
-                created_at: @user.created_at,
-                updated_at: @user.updated_at
-              }
+                message: 'User created successfully',
+                user: {
+                    id: @user.id,
+                    username: @user.username,
+                    name: @user.name,
+                    email: @user.email,
+                    bio: @user.bio,
+                    created_at: @user.created_at,
+                    updated_at: @user.updated_at
+                }
             }, status: :created
         else
             render json: {
@@ -49,6 +49,6 @@ class UsersController < ApplicationController
     private
         # Only allow a list of trusted parameters through.
         def user_params
-            params.require(:user).permit(:username, :name, :bio, :user_avatar, :user_banner)
+            params.require(:user).permit(:username, :name, :bio, :user_avatar, :user_banner, :email)
         end
 end

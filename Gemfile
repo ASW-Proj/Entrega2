@@ -35,6 +35,9 @@ gem "image_processing", "~> 1.2"
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
 
+# Gem used for url validation
+gem "validate_url"
+
 #para el swagger
 gem 'rswag-api'
 gem 'rswag-ui'
