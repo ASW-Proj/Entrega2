@@ -45,23 +45,46 @@ class CommentsController < ApplicationController
         @comments = @comments.order(created_at: :desc)
       when 'oldest'
         @comments = @comments.order(created_at: :asc)
+      when 'mostcommented'
+        @comments = Comment
+          .select('comments.*, COUNT(replies.id) AS replies_count')
+          .joins('LEFT JOIN comments AS replies ON replies.parent_id = comments.id')
+          .group('comments.id')
+          .order('replies_count DESC')
+      when 'likes'
+        @comments = Comment
+          .select('comments.*, COUNT(CASE WHEN comment_likes.positive THEN 1 ELSE NULL END) AS positive_likes_count, COUNT(CASE WHEN NOT comment_likes.positive THEN 1 ELSE NULL END) AS negative_likes_count')
+          .joins('LEFT JOIN comment_likes ON comment_likes.comment_id = comments.id')
+          .group('comments.id')
+          .order('positive_likes_count DESC, negative_likes_count ASC')
+
       end
     end
 
     comments_json = @comments.map do |comment|
       {
+        id: comment.id,
         body: comment.body,
         post_id: comment.post_id,
         user_id: comment.user_id,
         created_at: comment.created_at,
         updated_at: comment.updated_at,
+        replies: comment.replies.count,
+        likes: {
+          positive: comment.positive_likes_count || 0,
+          negative: comment.negative_likes_count || 0
+        }
       }
     end
+
 
     render json: { comments: comments_json }, status: :ok
   end
 
 
+  def self.parent_references_count
+      group(:parent_id).count
+    end
 
 
 
@@ -88,12 +111,18 @@ def create
         render json: {
           message: 'Comment created successfully',
           comment: {
-            body:@comment.body,
-            user_id: @comment.user_id,
-            post_id: @comment.post_id,
-            created_at: @comment.created_at,
-            updated_at: @comment.updated_at
-          }
+           id: comment.id,
+           body: comment.body,
+           post_id: comment.post_id,
+           user_id: comment.user_id,
+           created_at: comment.created_at,
+           updated_at: comment.updated_at,
+           replies: comment.replies.count,
+           likes: {
+             positive: comment.positive_likes_count || 0,
+             negative: comment.negative_likes_count || 0
+           }
+         }
         }, status: :created
     else
         render json: {
@@ -101,6 +130,48 @@ def create
         }, status: :unprocessable_entity
     end
 end
+
+
+
+# GET /comments/:id
+def show
+  @comment = Comment.find(params[:id])
+
+  comment_json = {
+    id: @comment.id,
+    body: @comment.body,
+    post_id: @comment.post_id,
+    user_id: @comment.user_id,
+    created_at: @comment.created_at,
+    updated_at: @comment.updated_at,
+    replies: @comment.replies.count,
+    likes: {
+      positive: @comment.positive_likes_count || 0,
+      negative: @comment.negative_likes_count || 0
+    }
+  }
+
+  replies_json = @comment.replies.map do |reply|
+    {
+      id: reply.id,
+      body: reply.body,
+      user_id: reply.user_id,
+      created_at: reply.created_at,
+      updated_at: reply.updated_at,
+      likes: {
+        positive: reply.positive_likes_count || 0,
+        negative: reply.negative_likes_count || 0
+      }
+    }
+  end
+
+  render json: { comment: comment_json, replies: replies_json }, status: :ok
+end
+
+
+
+
+
 
 
 
@@ -117,6 +188,10 @@ end
     #else
       params.require(:comment).permit(:body, :user_id,  :post_id, :parent_id, :community_id)
     #end
+  end
+
+  def likes
+    comment.comment_likes.where(positive: true) - comment.comment_likes.where(positive: false)
   end
 
 end
