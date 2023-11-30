@@ -2,41 +2,46 @@ class CommentsController < ApplicationController
 
   # GET /comments or /comments.json
   def index
+    @comments = Comment.all
 
-    order_param = params[:order]
-    case order_param
-        when 'recent'
-          @comments = Comment.all.order(created_at: :desc)
-        when 'oldest'
-          @comments = Comment.all.order(created_at: :asc)
-        end
-    post = params[:post]
-    user = params[:user]
-    if post != nil and user = nil
-      if post.where(id: post).exists?
-        @comments =@comments.where(post_id: post)
+    if params[:subscribe].present?
+      subs = params[:subscribe]
+      case subs
+      when 'subscribed'
+        @comments = @comments.order(created_at: :desc)
       else
-        render :json => { "status" => "404", "error" => "This post does not exist." }, status: :not_found and return
-      end
-    elsif user != nil
-      if User.where(id: user).exists?
-        @comments = @comments.where(user_id: user)
-      else
-        render :json => { "status" => "404", "error" => "This user does not exist." }, status: :not_found and return
+        @comments = @comments.order(created_at: :asc)
       end
     end
-  comments_json = @comments.map do |comment|
-              {
-                body: comment.body,
-                post_id: comment.post_id,
-                user_id: comment.user_id,
-                created_at: comment.created_at,
-                updated_at: comment.updated_at,
+    if params[:order].present?
+      order = params[:order]
+      case order
+      when 'recent'
+        @comments = @comments.order(created_at: :desc)
+      when 'oldest'
+        @comments = @comments.order(created_at: :asc)
+      end
+    end
+    if params[:search].present?
+      value = params[:search]
+      @comments = @comments.where('body LIKE ?', "%#{value}%")
+    end
 
-              }
+
+
+    comments_json = @comments.map do |comment|
+      {
+        body: comment.body,
+        post_id: comment.post_id,
+        user_id: comment.user_id,
+        created_at: comment.created_at,
+        updated_at: comment.updated_at,
+      }
+    end
+
+    render json: { comments: comments_json }, status: :ok
   end
-  render json: { comments: comments_json }, status: :ok
-  end
+
 
 
 
