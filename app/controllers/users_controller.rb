@@ -38,8 +38,6 @@ class UsersController < ApplicationController
                 name:  @user.name,
                 bio: @user.bio,
                 mail: @user.email,
-                user_avatar: @user.user_avatar ,
-                user_banner: @user.user_banner,
                 created_at: @user.created_at,
                 updated_at: @user.updated_at
               }
