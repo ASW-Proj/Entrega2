@@ -6,17 +6,39 @@ class UsersController < ApplicationController
 
         users_json = @users.map do |user|
             {
+              id:  user.id,
               username: user.username,
               name: user.name,
               bio: user.bio,
               created_at: user.created_at,
               updated_at: user.updated_at,
 
+
             }
         end
 
         render json: { users: users_json }, status: :ok
     end
+
+
+
+     # GET /users/:id
+      def show
+        @user = User.find(params[:id])
+
+        user_json = {
+          id: @user.id,
+          username: @user.username,
+          name: @user.name,
+          bio: @user.bio,
+          created_at: @user.created_at,
+          updated_at: @user.updated_at
+        }
+
+        render json: { user: user_json }, status: :ok
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: 'User not found' }, status: :not_found
+      end
 
 
 
@@ -28,16 +50,18 @@ class UsersController < ApplicationController
         # Save it in DB
         if @user.save
             render json: {
+
               message: 'User created successfully',
               user: {
+                id: @user.id,
                 username: @user.username,
                 name:  @user.name,
                 bio: @user.bio,
-                user_avatar: @user.user_avatar ,
-                user_banner: @user.user_banner,
+                email: @user.email,
                 created_at: @user.created_at,
                 updated_at: @user.updated_at
               }
+
             }, status: :created
         else
             render json: {
@@ -49,6 +73,6 @@ class UsersController < ApplicationController
     private
         # Only allow a list of trusted parameters through.
         def user_params
-            params.require(:user).permit(:username, :name, :bio, :user_avatar, :user_banner)
+            params.require(:user).permit(:username, :name, :bio, :user_avatar, :user_banner, :email)
         end
 end
