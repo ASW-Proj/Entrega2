@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+    root 'pages#home'
   get 'pages/home'
   devise_for :users, controllers: {
       omniauth_callbacks: 'users/omniauth_callbacks',
@@ -17,5 +18,4 @@ Rails.application.routes.draw do
   get "/users", to: "users#index"
   post "/users", to: "users#create"
 
-  root 'pages#home'
 end
