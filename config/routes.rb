@@ -1,10 +1,6 @@
 Rails.application.routes.draw do
   get 'pages/home'
-  devise_for :users, controllers: {
-      omniauth_callbacks: 'users/omniauth_callbacks',
-      sessions: 'users/sessions',
-      registrations: 'users/registrations'
-    }
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -18,5 +14,5 @@ Rails.application.routes.draw do
   post "/users", to: "users#create"
 
 
-  root 'pages#home', defaults: { format: :html }
+  root 'users#index' #, defaults: { format: :html }
 end

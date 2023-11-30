@@ -33,6 +33,7 @@ class UsersController < ApplicationController
                 username: @user.username,
                 name:  @user.name,
                 bio: @user.bio,
+                mail: @user.email,
                 user_avatar: @user.user_avatar ,
                 user_banner: @user.user_banner,
                 created_at: @user.created_at,
@@ -49,6 +50,6 @@ class UsersController < ApplicationController
     private
         # Only allow a list of trusted parameters through.
         def user_params
-            params.require(:user).permit(:username, :name, :bio, :user_avatar, :user_banner)
+            params.require(:user).permit(:username, :name, :bio, :user_avatar, :user_banner, :email)
         end
 end
