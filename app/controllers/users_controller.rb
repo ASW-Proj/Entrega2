@@ -20,6 +20,26 @@ class UsersController < ApplicationController
 
 
 
+     # GET /users/:id
+      def show
+        @user = User.find(params[:id])
+
+        user_json = {
+          id: @user.id,
+          username: @user.username,
+          name: @user.name,
+          bio: @user.bio,
+          created_at: @user.created_at,
+          updated_at: @user.updated_at
+        }
+
+        render json: { user: user_json }, status: :ok
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: 'User not found' }, status: :not_found
+      end
+
+
+
     # POST /users
     def create
         # Creates an instance of user
