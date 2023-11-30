@@ -1,10 +1,10 @@
 
-openapi: '3.0.1'
+openapi: 3.0.1
 info:
-  version: '1.0.0'
+  version: 1.0.0
   title: p·d programming.dev API
 servers:
-  - url: http://localhost:3000
+  - url: http://127.0.0.1:3000
 paths:
   /up:
     get:
@@ -18,6 +18,7 @@ paths:
   /communities:
     get:
       summary: Get all communities
+      operationId: getAllCommunities
       responses:
         '200':
           description: List of communities
@@ -37,8 +38,8 @@ paths:
         '400':
           description: Bad Request
       # Security requirements for future endpoints
-      security:
-        - BearerAuth: []
+      #security:
+       # - BearerAuth: []
 
     post:
       summary: Create a new community
@@ -47,7 +48,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewCommunity'
+              $ref: '#/components/schemas/Community'
       responses:
         '201':
           description: Community created successfully
@@ -60,8 +61,8 @@ paths:
         '400':
           description: Bad Request
       # Security requirements for future endpoints
-      security:
-        - BearerAuth: []
+      # security:
+      #   - BearerAuth: []
 
   /users:
     get:
@@ -85,8 +86,8 @@ paths:
         '400':
           description: Bad Request
       # Security requirements for future endpoints
-      security:
-        - BearerAuth: []
+      # security:
+      #   - BearerAuth: []
 
     post:
       summary: Create a new user
@@ -108,8 +109,8 @@ paths:
         '400':
           description: Bad Request
       # Security requirements for future endpoints
-      security:
-        - BearerAuth: []
+      # security:
+      #   - BearerAuth: []
 
 components:
   schemas:
@@ -346,8 +347,8 @@ components:
           type: string
           format: date-time
 
-securitySchemes:
-  BearerAuth:
-    type: http
-    scheme: bearer
-    bearerFormat: JWT
+#securitySchemes:
+#  BearerAuth:
+#    type: http
+#    scheme: bearer
+#    bearerFormat: JWT

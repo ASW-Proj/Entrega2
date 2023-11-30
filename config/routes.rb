@@ -18,14 +18,14 @@ Rails.application.routes.draw do
 
     # Users
     get "/users", to: "users#index"
+    get "/users/:id", to: "users#show"
     post "/users", to: "users#create"
-
-    # Comments
-    get "/comments", to: "comments#index"
+  
+    #Comments
+    get "/comments/:order", to: "comments#index"
     post "/comments", to: "comments#create"
-
+  
     # Subscriptions
     post "/community/:community_id/subscribe/:user_id", to: "subscriptions#subscribe"
     delete "/community/:community_id/unsubscribe/:user_id", to: "subscriptions#unsubscribe"
-
 end
