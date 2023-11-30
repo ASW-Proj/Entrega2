@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     #Comments
     get "/comments/:order", to: "comments#index"
     post "/comments", to: "comments#create"
+    get "/comments/:id", to: "comments#show"
   
     # Subscriptions
     post "/community/:community_id/subscribe/:user_id", to: "subscriptions#subscribe"
@@ -32,6 +33,7 @@ Rails.application.routes.draw do
     # Saved posts
     post "/post/:post_id/save/:user_id", to: "saved_posts#save"
     delete "/post/:post_id/save/:user_id", to: "saved_posts#unsave"
+
 
     # Saved comments
     post "/comment/:comment_id/save/:user_id", to: "saved_comments#save"
@@ -44,5 +46,6 @@ Rails.application.routes.draw do
     # Liked comments
     post "/comment/:comment_id/like/:user_id", to: "comment_likes#like"
     delete "/comment/:comment_id/like/:user_id", to: "comment_likes#unlike"
+
 
 end
