@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'pages/home'
 
   mount Rswag::Api::Engine => '/api-docs'
   mount Rswag::Ui::Engine => '/api-docs'
@@ -27,6 +26,4 @@ Rails.application.routes.draw do
   get "/comments", to: "comments#index"
   post "/comments", to: "comments#create"
 
-
-  root 'comments#index' #, defaults: { format: :html }
 end
