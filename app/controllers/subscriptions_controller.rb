@@ -8,7 +8,7 @@ class SubscriptionsController < ApplicationController
                 message: 'Subscribed successfully',
                 user_id: @subscription.user.id,
                 community_id: @subscription.community.id
-            }
+            }, status: :ok
         else
             render json: {
                 errors: @subscription.errors.full_messages
@@ -18,11 +18,18 @@ class SubscriptionsController < ApplicationController
 
     # DELETE /community/:community_id/unsubscribe/:user_id
     def unsubscribe
-        community.subscriptions.find_by(user: user).destroy!
+        @subscription = community.subscriptions.find_by(user: user)
 
-        render json: {
-            message: 'Unsubscribed successfully',
-        }
+        if !@subscription.nil?
+            @subscription.destroy!
+            render json: {
+                message: 'Unsubscribed successfully',
+            }, status: :ok
+        else
+            render json: {
+                errors: ['The user was not subscribed to the community']
+            }, status: :unprocessable_entity
+        end
     end
 
     # Community getter
