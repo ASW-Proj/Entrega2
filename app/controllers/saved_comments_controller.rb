@@ -7,7 +7,7 @@ class SavedCommentsController < ApplicationController
             render json: {
                 message: 'Saved successfully',
                 user_id: @saved_comment.user.id,
-                comment_id: @saved_comment.post.id
+                comment_id: @saved_comment.comment.id
             }, status: :ok
         else
             render json: {
