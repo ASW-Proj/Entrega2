@@ -27,7 +27,3 @@ module ProgramingDevApi
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end
-
-    config.api_only = true
-  end
-end
