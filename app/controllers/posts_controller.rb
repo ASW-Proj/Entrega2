@@ -2,47 +2,28 @@ class PostsController < ApplicationController
 
     # POST /posts
     def create
-        @user = User.find(params[:user_id])
-
         # Creates an instance of post
         @post = Post.new(post_params)
-
-        # If user and community exists
-        if @user.present? && @community.present?
-            # Save it in DB
-            if @post.save
-                render json: {
-                    message: 'Post created successfully',
-                    post: {
-                        id: @post.id,
-                        title: @post.title,
-                        url: @post.url,
-                        body: @post.body,
-                        creator_id: @post.user.id,
-                        community_id: @post.community.id,
-                        created_at: @post.created_at,
-                        updated_at: @post.updated_at
-                    }
-                }, status: :created
-            else
-                render json: {
-                    errors: @post.errors.full_messages
-                }, status: :unprocessable_entity
-            end
-        elsif @community.present?
+        # Save it in DB
+        if @post.save
             render json: {
-                errors: ["User does not exist"]
-            }, status: :unprocessable_entity
+                message: 'Post created successfully',
+                post: {
+                    id: @post.id,
+                    title: @post.title,
+                    url: @post.url,
+                    body: @post.body,
+                    creator_id: @post.user.id,
+                    community_id: @post.community.id,
+                    created_at: @post.created_at,
+                    updated_at: @post.updated_at
+                }
+            }, status: :created
         else
             render json: {
-                errors: ["Community does not exist"]
+                errors: @post.errors.full_messages
             }, status: :unprocessable_entity
         end
-
-
-
-
-
     end
 
     private
