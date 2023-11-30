@@ -1,0 +1,43 @@
+.nested-comments {
+  margin-left: 20px; /* Cambia esto según tu preferencia */
+}
+
+.comment {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.comment-body {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.parent-comment {
+  background-color: #f9f9f9;
+  padding: 10px;
+}
+
+.child-comment {
+  margin-left: 20px;
+  border-left: 2px solid #ccc;
+  padding-left: 10px;
+}
+
+.post-meta {
+  font-size: 12px;
+  color: #666;
+}
+
+.reply-button {
+  color: #007bff;
+  text-decoration: none;
+  margin-left: 10px;
+}
+
+
+.comment-separator {
+  border-top: 1px solid #ccc;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}

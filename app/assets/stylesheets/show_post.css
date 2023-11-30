@@ -1,0 +1,37 @@
+.post-ini {
+  display: flex;
+  align-items: flex-start;
+  margin: 10px;
+  padding: 10px;
+}
+
+.post-score,
+.post-details {
+  flex: 0 0 5%; 
+}
+
+.post-score p {
+  margin: 5px 0;
+}
+
+.post-body{
+  margin-left: 50px;
+}
+
+.comments {
+  margin-top: 20px; 
+}
+.vote-btn {
+  font-size: 24px;
+  cursor: pointer;
+  color: #aaa; 
+}
+
+
+.upvote-btn:active {
+  color: #007bff; 
+}
+
+.downvote-btn:active {
+  color: #ff0000;
+}
