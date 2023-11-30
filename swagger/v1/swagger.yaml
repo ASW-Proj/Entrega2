@@ -1,0 +1,353 @@
+
+openapi: '3.0.1'
+info:
+  version: '1.0.0'
+  title: p·d programming.dev API
+servers:
+  - url: http://localhost:3000
+paths:
+  /up:
+    get:
+      summary: Check API Health
+      responses:
+        '200':
+          description: Application is up
+        '500':
+          description: Application is down or encountering an error
+
+  /communities:
+    get:
+      summary: Get all communities
+      responses:
+        '200':
+          description: List of communities
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  communities:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Community'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Communities not found
+        '400':
+          description: Bad Request
+      # Security requirements for future endpoints
+      security:
+        - BearerAuth: []
+
+    post:
+      summary: Create a new community
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewCommunity'
+      responses:
+        '201':
+          description: Community created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Community'
+        '401':
+          description: Unauthorized
+        '400':
+          description: Bad Request
+      # Security requirements for future endpoints
+      security:
+        - BearerAuth: []
+
+  /users:
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Users not found
+        '400':
+          description: Bad Request
+      # Security requirements for future endpoints
+      security:
+        - BearerAuth: []
+
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+        '400':
+          description: Bad Request
+      # Security requirements for future endpoints
+      security:
+        - BearerAuth: []
+
+components:
+  schemas:
+    ActiveStorageAttachment:
+      type: object
+      required:
+        - name
+        - record_type
+        - record_id
+        - blob_id
+        - created_at
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        record_type:
+          type: string
+        record_id:
+          type: integer
+        blob_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+
+    ActiveStorageBlob:
+      type: object
+      required:
+        - key
+        - filename
+        - service_name
+        - byte_size
+        - created_at
+      properties:
+        id:
+          type: integer
+        key:
+          type: string
+        filename:
+          type: string
+        content_type:
+          type: string
+        metadata:
+          type: object
+        service_name:
+          type: string
+        byte_size:
+          type: integer
+        checksum:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    ActiveStorageVariantRecord:
+      type: object
+      required:
+        - blob_id
+        - variation_digest
+      properties:
+        id:
+          type: integer
+        blob_id:
+          type: integer
+        variation_digest:
+          type: string
+
+    CommentLike:
+      type: object
+      required:
+        - user_id
+        - comment_id
+        - positive
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        comment_id:
+          type: integer
+        positive:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Comment:
+      type: object
+      required:
+        - body
+        - created_at
+        - updated_at
+        - user_id
+        - community_id
+        - post_id
+      properties:
+        id:
+          type: integer
+        body:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        user_id:
+          type: integer
+        community_id:
+          type: integer
+        post_id:
+          type: integer
+        parent_id:
+          type: integer
+
+    Community:
+      type: object
+      required:
+        - identifier
+        - name
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+        identifier:
+          type: string
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    PostLike:
+      type: object
+      required:
+        - user_id
+        - post_id
+        - positive
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        post_id:
+          type: integer
+        positive:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Post:
+      type: object
+      required:
+        - title
+        - created_at
+        - updated_at
+        - user_id
+        - community_id
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        url:
+          type: string
+        body:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        user_id:
+          type: integer
+        community_id:
+          type: integer
+
+    SavedComment:
+      type: object
+      required:
+        - user_id
+        - comment_id
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        comment_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    SavedPost:
+      type: object
+      required:
+        - user_id
+        - post_id
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        post_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+securitySchemes:
+  BearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT

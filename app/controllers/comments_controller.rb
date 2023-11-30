@@ -87,7 +87,7 @@ end
     #if current_user != nil
      # params.require(:comment).permit(:body, :user_id, :post_id, :parent_id, :community_id)
     #else
-      params.require(:comment).permit(:body, :user_id,  :parent_id, :community_id)
+      params.require(:comment).permit(:body, :user_id,  :post_id, :parent_id, :community_id)
     #end
   end
 

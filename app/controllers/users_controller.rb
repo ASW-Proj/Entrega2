@@ -13,6 +13,7 @@ class UsersController < ApplicationController
               created_at: user.created_at,
               updated_at: user.updated_at,
 
+
             }
         end
 
@@ -29,6 +30,7 @@ class UsersController < ApplicationController
         # Save it in DB
         if @user.save
             render json: {
+
               message: 'User created successfully',
               user: {
                 username: @user.username,
@@ -40,6 +42,7 @@ class UsersController < ApplicationController
                 created_at: @user.created_at,
                 updated_at: @user.updated_at
               }
+
             }, status: :created
         else
             render json: {

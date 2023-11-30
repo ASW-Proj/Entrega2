@@ -11,4 +11,5 @@ class Post < ApplicationRecord
     :too_short => "must have at least %{count} characters",
     :too_long  => "must have at most %{count} characters",
   }
+  validates :url, url: true
 end

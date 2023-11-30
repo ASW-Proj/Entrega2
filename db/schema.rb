@@ -128,6 +128,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_29_160550) do
     t.string "username", null: false
     t.string "name"
     t.text "bio"
+<<<<<<< HEAD
+=======
+    t.text "email", null: false
+>>>>>>> main
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", default: "", null: false
