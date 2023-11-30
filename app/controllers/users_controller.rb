@@ -37,7 +37,7 @@ class UsersController < ApplicationController
                 username: @user.username,
                 name:  @user.name,
                 bio: @user.bio,
-                mail: @user.email,
+                email: @user.email,
                 created_at: @user.created_at,
                 updated_at: @user.updated_at
               }
