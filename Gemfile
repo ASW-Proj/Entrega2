@@ -38,6 +38,10 @@ gem "image_processing", "~> 1.2"
 # Gem used for url validation
 gem "validate_url"
 
+#para el swagger
+gem 'rswag-api'
+gem 'rswag-ui'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
