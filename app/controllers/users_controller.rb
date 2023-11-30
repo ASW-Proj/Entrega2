@@ -6,12 +6,14 @@ class UsersController < ApplicationController
 
         users_json = @users.map do |user|
             {
-                id: user.id,
-                username: user.username,
-                name: user.name,
-                bio: user.bio,
-                created_at: user.created_at,
-                updated_at: user.updated_at,
+              id:  user.id,
+              username: user.username,
+              name: user.name,
+              bio: user.bio,
+              created_at: user.created_at,
+              updated_at: user.updated_at,
+
+
             }
         end
 
@@ -28,16 +30,18 @@ class UsersController < ApplicationController
         # Save it in DB
         if @user.save
             render json: {
-                message: 'User created successfully',
-                user: {
-                    id: @user.id,
-                    username: @user.username,
-                    name: @user.name,
-                    email: @user.email,
-                    bio: @user.bio,
-                    created_at: @user.created_at,
-                    updated_at: @user.updated_at
-                }
+
+              message: 'User created successfully',
+              user: {
+                id: @user.id,
+                username: @user.username,
+                name:  @user.name,
+                bio: @user.bio,
+                email: @user.email,
+                created_at: @user.created_at,
+                updated_at: @user.updated_at
+              }
+
             }, status: :created
         else
             render json: {
