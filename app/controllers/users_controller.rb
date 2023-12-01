@@ -75,7 +75,7 @@ class UsersController < ApplicationController
 
     # DELETE /users/1
         def destroy
-          @user = User.find(params[:id])
+          @user = current_user
 
           if @user.destroy
             render json: { message: 'User deleted successfully' }, status: :ok
@@ -84,6 +84,32 @@ class UsersController < ApplicationController
           end
         end
 
+
+
+# POST /users/1/edit
+      def update
+        @user = current_user
+
+        if @user.update(user_params)
+          render json: {
+            message: 'User updated successfully',
+            user: {
+                id: @user.id,
+                username: @user.username,
+                name:  @user.name,
+                bio: @user.bio,
+                email: @user.email,
+                created_at: @user.created_at,
+                updated_at: @user.updated_at,
+                api_key: @user.api_key
+              }
+          }, status: :ok
+        else
+          render json: {
+            errors: @user.errors.full_messages
+          }, status: :unprocessable_entity
+        end
+      end
 
     private
         # Only allow a list of trusted parameters through.
