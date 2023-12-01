@@ -1,7 +1,6 @@
 class SavedPostsController < ApplicationController
 
           before_action :authenticate_user, if: -> { %w[post put delete].include?(request.method.downcase) }
-    attr_reader :current_user
 
     # POST /post/:post_id/save/:user_id
     def save

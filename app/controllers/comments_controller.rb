@@ -2,7 +2,7 @@ class CommentsController < ApplicationController
 
 
       before_action :authenticate_user, if: -> { %w[post put delete].include?(request.method.downcase) }
-    attr_reader :current_user
+
 
   # GET /comments or /comments.json
   def index
@@ -237,6 +237,10 @@ end
 
         def token_valid?(token)
             !token.nil? && !token.empty? && User.exists?(api_key: token)
+        end
+
+        def comment_params
+            params.require(:comment).permit(:body, :user_id,  :post_id, :parent_id, :community_id)
         end
 
 end
