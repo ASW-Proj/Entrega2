@@ -1,4 +1,9 @@
 class PostLikesController < ApplicationController
+    
+    
+      before_action :authenticate_user, if: -> { %w[post put delete].include?(request.method.downcase) }
+    attr_reader :current_user
+
     # POST /post/:post_id/like/:user_id
     def like
         if post.post_likes.find_by(user: user).nil?
