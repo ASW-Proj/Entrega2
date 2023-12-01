@@ -13,14 +13,20 @@ Rails.application.routes.draw do
     get "/communities", to: "communities#index"
     post "/communities", to: "communities#create"
     get "/communities/:id", to: "communities#show"
+    delete "/communities/:id", to: "communities#destroy"
 
     # Posts
+    get "/posts", to: "posts#index"
     post "/posts", to: "posts#create"
+    get "/posts/:id", to: "posts#show"
+    delete "/posts/:id", to: "posts#destroy"
+    post '/posts/:id/edit', to: 'posts#update'
 
     # Users
     get "/users", to: "users#index"
     post "/users", to: "users#create"
     get "/users/:id", to: "users#show"
+    delete "/users/:id", to: "users#destroy"
     
   
     #Comments
