@@ -15,7 +15,7 @@ servers:
 paths:
   /up:
     get:
-      summary: Check API Health
+      summary: check API Health
       responses:
         '200':
           description: Application is up
@@ -157,6 +157,8 @@ paths:
           description: Unauthorized
         '404':
           description: Users not found
+      security:
+        - bearerAuth: []
   /posts:
     post:
       tags:
@@ -220,7 +222,7 @@ paths:
           description: Unauthorized
         '404':
           description: Users not found
-  
+
   
 
           
@@ -255,6 +257,7 @@ paths:
           description: Unauthorized
         '404':
           description: Users not found
+
     delete:
       tags:
         - posts
@@ -304,6 +307,9 @@ paths:
           description: Unauthorized
         '404':
           description: Users not found
+          
+      security:
+        - bearerAuth: []
       
   /users:
     get:
@@ -329,6 +335,7 @@ paths:
           description: Unauthorized
         '404':
           description: Users not found
+
     post:
       tags:
         - users
@@ -384,6 +391,7 @@ paths:
           description: Unauthorized
         '404':
           description: Users not found
+
     delete: 
       tags: 
         - users
@@ -405,6 +413,8 @@ paths:
           description: Unauthorized
         '404':
           description: Users not found
+      security:
+        - bearerAuth: []
          
     put:
       tags:
@@ -432,7 +442,9 @@ paths:
         '401':
           description: Unauthorized
         '404':
-          description: Users not found      
+          description: Users not found   
+      security:
+        - bearerAuth: []
   
   
   
@@ -490,6 +502,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Comment'
+
   
   /comments/{id}: 
     get: 
@@ -522,6 +535,7 @@ paths:
           description: Unauthorized
         '404':
           description: Users not found
+
     delete:
       tags:
         - comments
@@ -863,6 +877,9 @@ paths:
           description: Unauthorized
       security:
         - bearerAuth: []
+        
+        
+        
 components:
   schemas:
     ActiveStorageAttachment:
@@ -1111,8 +1128,8 @@ components:
         updated_at:
           type: string
           format: date-time
-securitySchemes:
-  bearerAuth:
-    type: http
-    scheme: bearer
-    bearerFormat: JWT
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
