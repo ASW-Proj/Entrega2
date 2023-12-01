@@ -50,7 +50,7 @@ paths:
       tags:
         - communities
       summary: create a new community
-      description: Creates a new communirt according to the given parameters.
+      description: Creates a new community according to the given parameters.
       requestBody:
         required: true
         content:
@@ -79,7 +79,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: Identifier of the comment we want to edit
+          description: Identifier of the community we want to edit
           required: true
           schema:
             type: integer
@@ -138,7 +138,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: Identifier of the comment we want to edit
+          description: Identifier of the community we want to edit
           required: true
           schema:
             type: integer
@@ -358,8 +358,7 @@ paths:
           description: Bad Request
         '401':
           description: Unauthorized
-      security:
-        - bearerAuth: []
+
   /users/{id}:
     get:
       tags:

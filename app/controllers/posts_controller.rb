@@ -1,7 +1,6 @@
 class PostsController < ApplicationController
 
       before_action :authenticate_user, if: -> { %w[post put delete].include?(request.method.downcase) }
-    attr_reader :current_user
 
     # POST /posts
     def create
