@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+    before_create :set_api_key
     has_one_attached :user_avatar
     has_one_attached :user_banner
 
@@ -15,4 +16,12 @@ class User < ApplicationRecord
         :too_short => "is not valid",
         :too_long  => "is not valid",
     }
+    def generate_api_key
+        Digest::MD5.hexdigest(SecureRandom.hex)
+    end
+    
+    def set_api_key
+        self.api_key = generate_api_key
+    end
+
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_24_171711) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_30_211247) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -128,9 +128,11 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_24_171711) do
     t.string "username", null: false
     t.string "name"
     t.text "bio"
-    t.text "email", null: false
+    t.text "mail"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "api_key"
+    t.index ["api_key"], name: "index_users_on_api_key", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
