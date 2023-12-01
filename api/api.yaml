@@ -30,7 +30,7 @@ paths:
       operationId: getAllCommunities
       responses:
         '200':
-          description: List of communities
+          description: Returns a list of communities
           content:
             application/json:
               schema:
@@ -49,7 +49,8 @@ paths:
     post:
       tags:
         - communities
-      summary: Create a new community
+      summary: create a new community
+      description: Creates a new communirt according to the given parameters.
       requestBody:
         required: true
         content:
@@ -81,6 +82,12 @@ paths:
           description: Identifier of the comment we want to edit
           required: true
           schema:
+            type: integer
+        - name: user_id
+          in: query
+          description: If this is present, returns only those communities for which the user is subscribed. 
+          required: false 
+          schema: 
             type: integer
       responses:
         '200':
@@ -226,7 +233,7 @@ paths:
       tags:
         - posts
       summary: show a post
-      description: Check a list of the given community's posts.
+      description: Return the information of the post with the given id
       parameters:
         - name: id
           in: path
@@ -308,7 +315,8 @@ paths:
     get:
       tags:
         - users
-      summary: Get all users
+      summary: get all users
+      description: Returns a list with the details of all users in our system. 
       responses:
         '200':
           description: List of users
@@ -330,7 +338,8 @@ paths:
     post:
       tags:
         - users
-      summary: Create a new user
+      summary: create a new user
+      description: Creates a new user with the parameters given. 
       requestBody:
         required: true
         content:
@@ -365,7 +374,7 @@ paths:
             type: integer
       responses:
         '200':
-          description: Returns the information of the logged user
+          description: Returns the information of the corresponding user
           content:
             application/json:
               schema:
@@ -446,7 +455,7 @@ paths:
               $ref: '#/components/schemas/User'
       responses:
         '201':
-          description: User created successfully
+          description: Comment created successfully
           content:
             application/json:
               schema:
@@ -503,7 +512,7 @@ paths:
             type: integer
       responses:
         '200':
-          description: Returns the information of the logged user
+          description: Returns the information of the requested comment
           content:
             application/json:
               schema:
@@ -743,10 +752,9 @@ paths:
     post:
       tags:
         - posts
-      summary: Like or un-like a post
+      summary: Like or dislike a post
       description: >-
-        If the user hadn't liked the post before, he likes it. If he had already
-        liked it, the like is removes.
+        The user adds the corresponding rating to the post. 
       parameters:
         - name: post_id
           in: path
@@ -760,6 +768,11 @@ paths:
           required: true
           schema:
             type: integer
+        - name: positive
+          in: query
+          description: True if vote is positive, false otherwise. 
+          schema:
+            type: boolean
       responses:
         '201':
           description: Un/Liked succesfully
@@ -772,10 +785,9 @@ paths:
     delete:
       tags:
         - posts
-      summary: Dislike or un-dislike a post
+      summary: Un-like or un-dislike a post
       description: >-
-        If the user hadn't disliked the post before, he dislikes it. If he had
-        already disliked it, the dislike is removes.
+        The user removes the rating previously given to a post. 
       parameters:
         - name: post_id
           in: path
@@ -802,8 +814,8 @@ paths:
     post:
       tags:
         - comments
-      summary: Like button
-      description: Likes or removes the like of a comment
+      summary: adds rating to a post
+      description: Adds a like or dislike to the comment with id=comment_id, by the user user_id. 
       parameters:
         - name: comment_id
           in: path
@@ -817,6 +829,11 @@ paths:
           required: true
           schema:
             type: integer
+        - name: positive
+          in: query
+          description: True if vote is positive, false otherwise. 
+          schema:
+            type: boolean
       responses:
         '201':
           description: Saved succesfully
@@ -829,8 +846,8 @@ paths:
     delete:
       tags:
         - comments
-      summary: Dislike button
-      description: Adds or removes a dislike of a comment
+      summary: remove rating to a post
+      description: Removes the like or dislike issued by the user with user_id in the post with id=post_id 
       parameters:
         - name: comment_id
           in: path
