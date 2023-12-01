@@ -7,5 +7,5 @@ Maria Camps
 Link al vostre projecte a Taiga
 https://tree.taiga.io/project/mcampsll-asw-project/timeline
 
-Link a la vostra aplicació desplegada a Fly.io
+Link a la vostra aplicació desplegada a Fly.io: https://entrega2api.fly.dev/api-docs/index.html
 
