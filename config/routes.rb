@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     delete "/communities/:id", to: "communities#destroy"
     post '/communities/:id/edit', to: 'communities#update'
 
+
     # Posts
     get "/posts", to: "posts#index"
     post "/posts", to: "posts#create"
