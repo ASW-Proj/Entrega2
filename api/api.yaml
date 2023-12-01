@@ -11,7 +11,7 @@ info:
      - [Nuestro GitHub](https://github.com/ASW-Proj/Entrega2/tree/main)
      - [Nuestro proyecto en Taiga](https://tree.taiga.io/project/mcampsll-asw-project/backlog)
 servers:
-  - url: http://127.0.0.1:3000
+  - url: https://entrega2api.fly.dev
 paths:
   /up:
     get:
