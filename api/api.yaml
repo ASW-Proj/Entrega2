@@ -99,6 +99,8 @@ paths:
           description: Bad Request
       security:
         - bearerAuth: []
+      security:
+        - bearerAuth: []
       
     get:
       tags: 

@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     post "/communities", to: "communities#create"
     get "/communities/:id", to: "communities#show"
     delete "/communities/:id", to: "communities#destroy"
+    post '/communities/:id/edit', to: 'communities#update'
+
 
     # Posts
     get "/posts", to: "posts#index"
@@ -27,7 +29,8 @@ Rails.application.routes.draw do
     post "/users", to: "users#create"
     get "/users/:id", to: "users#show"
     delete "/users/:id", to: "users#destroy"
-    
+    post '/users/:id/edit', to: 'users#update'
+
   
     #Comments
     get "/comments", to: "comments#index"

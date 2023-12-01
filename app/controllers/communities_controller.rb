@@ -125,9 +125,31 @@ class CommunitiesController < ApplicationController
     end
 
 
-    # DELETE /communities/1
-    def destroy
+    # POST /posts/1/edit
+      def update
         @community = Community.find(params[:id])
+
+        if @community.update(community_params)
+          render json: {
+            message: 'Community updated successfully',
+            community: {
+                id: @community.id,
+                identifier: @community.identifier,
+                name: @community.name,
+                created_at: @community.created_at,
+                updated_at: @community.updated_at
+            }
+          }, status: :ok
+        else
+          render json: {
+            errors: @community.errors.full_messages
+          }, status: :unprocessable_entity
+        end
+      end
+      
+     # DELETE /communities/1
+        def destroy
+          @community = Community.find(params[:id])
 
         if @community.destroy
             render json: { message: 'Post deleted successfully' }, status: :ok
@@ -135,7 +157,6 @@ class CommunitiesController < ApplicationController
             render json: { errors: @community.errors.full_messages }, status: :unprocessable_entity
         end
     end
-
 
 
 
