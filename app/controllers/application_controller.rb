@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::API
-    before_action :authenticate_user, if: -> { %w[post put delete].include?(request.method.downcase) }
+    before_action :authenticate_user, if: -> { %w[post put delete].include?(request.method.downcase) }, unless: -> { controller_name == 'Users' }
     attr_reader :current_user
 
     private

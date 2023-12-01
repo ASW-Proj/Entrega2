@@ -37,8 +37,7 @@ class CommunitiesController < ApplicationController
     # GET /communities/id
     def show
         @community= Community.find(params[:id])
-            if !@community.nil?
-
+        if !@community.nil?
             render json: {
                 message: 'Community info',
                 community: {
@@ -53,45 +52,47 @@ class CommunitiesController < ApplicationController
                     updated_at: @community.updated_at,
                 }
             }, status: :ok
-                if params[:content].present?
-                    content = params[:content]
-                      case content
-                      when 'posts'
-                      posts_json = @community.posts.map do |post|
-                      post_json = {
-                          id: post.id,
-                          title: post.title,
-                          url: post.url,
-                          body: post.body,
-                          user_id: post.user_id,
-                          community_id: post.community_id,
-                          created_at: post.created_at,
-                          updated_at: post.updated_at,
-                          comments: post.comments.count,
-                          likes: {
-                           positive: post.post_likes.where(positive: true).count || 0,
-                           negative: post.post_likes.where(positive: false).count || 0
-                         }
-                        }
-
-                      when 'comments'
-
-                        comments_json = @community.comments.map do |comment|
-                          comment_json = {
-                              id: comment.id,
-                              body: comment.body,
-                              post_id: comment.post_id,
-                              user_id: comment.user_id,
-                              created_at: comment.created_at,
-                              updated_at: comment.updated_at,
-                              replies: comment.replies.count,
-                              likes: {
-                                positive: comment.comment_likes.where(positive: true).count || 0,
-                                negative: comment.comment_likes.where(positive: false).count || 0
-                              }
+            if params[:content].present?
+                content = params[:content]
+                case content
+                    when 'posts'
+                    posts_json = @community.posts.map do |post|
+                        post_json = {
+                            id: post.id,
+                            title: post.title,
+                            url: post.url,
+                            body: post.body,
+                            user_id: post.user_id,
+                            community_id: post.community_id,
+                            created_at: post.created_at,
+                            updated_at: post.updated_at,
+                            comments: post.comments.count,
+                            likes: {
+                            positive: post.post_likes.where(positive: true).count || 0,
+                            negative: post.post_likes.where(positive: false).count || 0
                             }
-                      end
-                  end
+                        }
+                    end
+                    when 'comments'
+                    comments_json = @community.comments.map do |comment|
+                        comment_json = {
+                            id: comment.id,
+                            body: comment.body,
+                            post_id: comment.post_id,
+                            user_id: comment.user_id,
+                            created_at: comment.created_at,
+                            updated_at: comment.updated_at,
+                            replies: comment.replies.count,
+                            likes: {
+                            positive: comment.comment_likes.where(positive: true).count || 0,
+                            negative: comment.comment_likes.where(positive: false).count || 0
+                            }
+                        }
+                    end
+                else
+                end
+            else
+            end
         else
             render json: {
                 errors: @community.errors.full_messages
@@ -124,16 +125,16 @@ class CommunitiesController < ApplicationController
     end
 
 
-     # DELETE /communities/1
-        def destroy
-          @community = Community.find(params[:id])
+    # DELETE /communities/1
+    def destroy
+        @community = Community.find(params[:id])
 
-          if @community.destroy
+        if @community.destroy
             render json: { message: 'Post deleted successfully' }, status: :ok
-          else
+        else
             render json: { errors: @community.errors.full_messages }, status: :unprocessable_entity
-          end
         end
+    end
 
 
 
