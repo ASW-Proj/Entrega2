@@ -1,8 +1,8 @@
 Nom de tots els membres de l'equip:
 
-Gisela Borràs
-Ignacio Folgueiras
-Xavier Viguera
+Gisela Borràs,
+Ignacio Folgueiras,
+Xavier Viguera,
 Maria Camps
 
 Link al vostre projecte a Taiga
