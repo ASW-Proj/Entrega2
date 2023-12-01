@@ -72,7 +72,11 @@ class PostsController < ApplicationController
           when 'oldest'
             @posts = @posts.order(created_at: :asc)
           when 'mostcommented'
-            @posts = @posts.order('posts.comments.count DESC')
+            @posts = @posts
+              .joins(:comments)
+              .group('posts.id') # Ensure each post is only counted once
+              .order('COUNT(comments.id) DESC')
+
           when 'likes'
             @posts = @posts
               .select('posts.*, COUNT(CASE WHEN post_likes.positive THEN 1 ELSE NULL END) AS positive_likes_count, COUNT(CASE WHEN NOT post_likes.positive THEN 1 ELSE NULL END) AS negative_likes_count')
