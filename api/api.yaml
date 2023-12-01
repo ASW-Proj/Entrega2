@@ -28,6 +28,13 @@ paths:
       summary: get all communities
       description: Returns a list of all communities existing in the DB
       operationId: getAllCommunities
+      parameters:
+        - name: user_id
+          in: query
+          description: If this is present, returns only those communities for which the user is subscribed. 
+          required: false 
+          schema: 
+            type: integer
       responses:
         '200':
           description: Returns a list of communities
@@ -83,12 +90,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: user_id
-          in: query
-          description: If this is present, returns only those communities for which the user is subscribed. 
-          required: false 
-          schema: 
-            type: integer
+        
       responses:
         '200':
           description: Information of the community
