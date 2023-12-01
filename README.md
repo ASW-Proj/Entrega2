@@ -1,24 +1,11 @@
-# README
+Nom de tots els membres de l'equip:
+Gisela Borràs
+Ignacio Folgueiras
+Xavier Viguera
+Maria Camps
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Link al vostre projecte a Taiga
+https://tree.taiga.io/project/mcampsll-asw-project/timeline
 
-Things you may want to cover:
+Link a la vostra aplicació desplegada a Fly.io
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
