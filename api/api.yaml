@@ -243,7 +243,7 @@ paths:
             type: integer
       responses:
         '200':
-          description: Information of the community
+          description: Information of the post
           content:
             application/json:
               schema:
@@ -452,14 +452,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/Comment'
       responses:
         '201':
           description: Comment created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Comment'
         '400':
           description: Bad Request
         '401':
@@ -521,7 +521,7 @@ paths:
                   users:
                     type: array
                     items:
-                      $ref: '#/components/schemas/User'
+                      $ref: '#/components/schemas/Comment'
         '400':
           description: Bad Request
         '401':
@@ -571,7 +571,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/Comment'
       responses:
         '200':
           description: Comment edited succesfully
@@ -630,7 +630,7 @@ paths:
           schema:
             type: integer
       responses:
-        '201':
+        '200':
           description: Unsubscribed succesfully
         '400':
           description: Bad Request
@@ -775,7 +775,7 @@ paths:
             type: boolean
       responses:
         '201':
-          description: Un/Liked succesfully
+          description: Rating added succesfully
         '400':
           description: Bad Request
         '401':
@@ -803,7 +803,7 @@ paths:
             type: integer
       responses:
         '201':
-          description: Removed save succesfully
+          description: Removed rating succesfully
         '400':
           description: Bad Request
         '401':
@@ -836,7 +836,7 @@ paths:
             type: boolean
       responses:
         '201':
-          description: Saved succesfully
+          description: Saved rating succesfully
         '400':
           description: Bad Request
         '401':
@@ -863,7 +863,7 @@ paths:
             type: integer
       responses:
         '201':
-          description: Removed save succesfully
+          description: Removed rating succesfully
         '400':
           description: Bad Request
         '401':
