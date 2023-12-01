@@ -1,5 +1,5 @@
 class CommunitiesController < ApplicationController
-    before_action :authenticate_user
+    before_action :authenticate_user,only:[:create]
 
     # GET /communities
     def index
@@ -71,16 +71,12 @@ class CommunitiesController < ApplicationController
       end
     
       def extract_token_from_request
-        # Extraer el token Bearer del encabezado Authorization
         header = request.headers['Authorization']
         header&.split(' ')&.last # Tomar la parte del token después de 'Bearer'
       end
     
       def token_valid?(token)
-        # Aquí debes validar si el token es válido
-        # Esto podría incluir la verificación del token JWT, por ejemplo
-        # Aquí asumimos una simple verificación si el token no está en blanco
-        !token.nil? && !token.empty?
+        !token.nil? && !token.empty? && User.exists?(api_key: token)
       end
         # Only allow a list of trusted parameters through.
         def community_params

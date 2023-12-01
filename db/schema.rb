@@ -128,7 +128,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_30_211247) do
     t.string "username", null: false
     t.string "name"
     t.text "bio"
-    t.text "mail"
+    t.text "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "api_key"
