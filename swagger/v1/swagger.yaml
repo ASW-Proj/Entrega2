@@ -110,68 +110,6 @@ paths:
 
 components:
   schemas:
-    User:
-      description: Represents a user in the application.
-      properties:
-        id:
-          type: integer
-          description: Unique identifier for the user.
-        email:
-          type: string
-          maxLength: 255
-          minLength: 5
-          description: Email address of the user.
-        api_key:
-          type: string
-          description: API key generated for the user.
-        created_at:
-          type: string
-          format: date-time
-          description: Date and time when the user was created.
-        updated_at:
-          type: string
-          format: date-time
-          description: Date and time when the user was last updated.
-        user_avatar:
-          type: string
-          description: Attachment for user avatar.
-        user_banner:
-          type: string
-          description: Attachment for user banner.
-        relations:
-          comments:
-            type: array
-            items:
-              $ref: '#/components/schemas/Comment'
-            description: Comments created by the user.
-          posts:
-            type: array
-            items:
-              $ref: '#/components/schemas/Post'
-            description: Posts created by the user.
-          comment_likes:
-            type: array
-            items:
-              $ref: '#/components/schemas/CommentLike'
-            description: Likes given by the user on comments.
-          post_likes:
-            type: array
-            items:
-              $ref: '#/components/schemas/PostLike'
-            description: Likes given by the user on posts.
-          saved_posts:
-            type: array
-            items:
-              $ref: '#/components/schemas/SavedPost'
-            description: Posts saved by the user.
-          saved_comments:
-            type: array
-            items:
-              $ref: '#/components/schemas/SavedComment'
-            description: Comments saved by the user.
-        required:
-          - email
-
     ActiveStorageAttachment:
       type: object
       required:
