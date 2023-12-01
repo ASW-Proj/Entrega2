@@ -182,6 +182,9 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request
+      #no deberia tener token pero es para que funcione
+      security:
+        - bearerAuth: []
       
       
   /users/{id}: 
