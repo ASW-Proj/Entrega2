@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     post "/users", to: "users#create"
   
     #Comments
-    get "/comments/:order", to: "comments#index"
+    get "/comments", to: "comments#index"
     post "/comments", to: "comments#create"
     get "/comments/:id", to: "comments#show"
     delete "/comments/:id", to: "comments#destroy"
