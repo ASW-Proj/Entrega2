@@ -102,33 +102,32 @@ class CommentsController < ApplicationController
 
 #POST /comments
 def create
-     # Creates an instance of comment
+  # Creates an instance of comment
+  @comment = Comment.new(comment_params)
 
-    @comment = Comment.new(comment_params)
-
-    # Save it in DB
-    if @comment.save
-        render json: {
-          message: 'Comment created successfully',
-          comment: {
-           id: comment.id,
-           body: comment.body,
-           post_id: comment.post_id,
-           user_id: comment.user_id,
-           created_at: comment.created_at,
-           updated_at: comment.updated_at,
-           replies: comment.replies.count,
-           likes: {
-                 positive: comment.comment_likes.where(positive: true).count || 0,
-                 negative: comment.comment_likes.where(positive: false).count || 0
-               }
-         }
-        }, status: :created
-    else
-        render json: {
-          errors: @comment.errors.full_messages
-        }, status: :unprocessable_entity
-    end
+  # Save it in DB
+  if @comment.save
+    render json: {
+      message: 'Comment created successfully',
+      comment: {
+        id: @comment.id,
+        body: @comment.body,
+        post_id: @comment.post_id,
+        user_id: @comment.user_id,
+        created_at: @comment.created_at,
+        updated_at: @comment.updated_at,
+        replies: @comment.replies.count,
+        likes: {
+          positive: @comment.comment_likes.where(positive: true).count || 0,
+          negative: @comment.comment_likes.where(positive: false).count || 0
+        }
+      }
+    }, status: :created
+  else
+    render json: {
+      errors: @comment.errors.full_messages
+    }, status: :unprocessable_entity
+  end
 end
 
 
@@ -179,6 +178,35 @@ def destroy
     render json: { errors: @comment.errors.full_messages }, status: :unprocessable_entity
   end
 end
+
+
+# POST /comments/1/edit
+  def update
+    @comment = Comment.find(params[:id])
+
+    if @comment.update(comment_params)
+      render json: {
+        message: 'Comment updated successfully',
+        comment: {
+          id: @comment.id,
+          body: @comment.body,
+          post_id: @comment.post_id,
+          user_id: @comment.user_id,
+          created_at: @comment.created_at,
+          updated_at: @comment.updated_at,
+          replies: @comment.replies.count,
+          likes: {
+            positive: @comment.comment_likes.where(positive: true).count || 0,
+            negative: @comment.comment_likes.where(positive: false).count || 0
+          }
+        }
+      }, status: :ok
+    else
+      render json: {
+        errors: @comment.errors.full_messages
+      }, status: :unprocessable_entity
+    end
+  end
 
   # Only allow a list of trusted parameters through.
   def comment_params
