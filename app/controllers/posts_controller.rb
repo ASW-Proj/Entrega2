@@ -27,44 +27,47 @@ class PostsController < ApplicationController
     end
 
     # GET /posts or /posts.json
-      def index
+    def index
         @posts = Post.all
 
         # Buscamos los posts por title
         if params[:search].present?
-          value = params[:search]
-          @posts = @posts.where('title LIKE ?', "%#{value}%")
+            value = params[:search]
+            @posts = @posts.where('title LIKE ?', "%#{value}%")
         end
 
         # Filtramos los posts
         if params[:filter].present?
             if params[:user_id].present?
-              user_id = params[:user_id]
-              subs = params[:filter]
-              case subs
-              when 'subscribed'
-                  @posts = Post.joins(:community, community: :subscriptions)
+                user_id = params[:user_id]
+                subs = params[:filter]
+                case subs
+                    when 'subscribed'
+                        @posts = Post.joins(:community, community: :subscriptions)
                                      .where(subscriptions: { user_id: user_id })
                                      .order('posts.created_at DESC')
-              when 'created'
-                  @posts = Post.where( user_id: user_id )
-                                   .order('posts.created_at DESC')
-              when 'saved'
-                  @posts = Post.joins(:saved_posts)
-                                 .where(saved_posts: { user_id: user_id })
-                                 .order('posts.created_at DESC')
-              end
+                    when 'created'
+                        @posts = Post.where( user_id: user_id )
+                                     .order('posts.created_at DESC')
+                    when 'saved'
+                        @posts = Post.joins(:saved_posts)
+                                     .where(saved_posts: { user_id: user_id })
+                                     .order('posts.created_at DESC')
+                end
+
             else
-            #si no hay user id no podemos hacer ninguno de los filtros
-              render json: {
-                errors: "Mismatch user_id"
-              }, status: :unprocessable_entity
-              return
+                #si no hay user id no podemos hacer ninguno de los filtros
+                render json: {
+                    errors: "Mismatch user_id"
+                }, status: :unprocessable_entity
+                return
             end
         end
 
         # Ordenamos los posts
         if params[:order].present?
+
+      
           order = params[:order]
           case order
           when 'recent'
@@ -85,10 +88,10 @@ class PostsController < ApplicationController
               .order('positive_likes_count DESC, negative_likes_count ASC')
 
           end
+
         end
 
-        posts_json = @posts.map do |post|
-          {
+        posts_json = @posts.map do |post| {
             id: post.id,
             title: post.title,
             url: post.url,
@@ -97,23 +100,37 @@ class PostsController < ApplicationController
             community_id: post.community_id,
             created_at: post.created_at,
             updated_at: post.updated_at,
-            comments: post.comments.count,
+            num_comments: post.comments.count,
             likes: {
-                             positive: post.post_likes.where(positive: true).count || 0,
-                             negative: post.post_likes.where(positive: false).count || 0
-                           }
-          }
+                positive: post.post_likes.where(positive: true).count || 0,
+                negative: post.post_likes.where(positive: false).count || 0
+            }
+        }
         end
 
-
         render json: { posts: posts_json }, status: :ok
-      end
+    end
 
 
 
-      # GET /posts/:id
-      def show
+      # GET /posts/1
+    def show
         @post = Post.find(params[:id])
+
+        comments_json = @post.comments.map do |comment| {
+            id: comment.id,
+            body: comment.body,
+            post_id: comment.post_id,
+            user_id: comment.user_id,
+            created_at: comment.created_at,
+            updated_at: comment.updated_at,
+            replies: comment.replies.count,
+            likes: {
+                positive: comment.comment_likes.where(positive: true).count || 0,
+                negative: comment.comment_likes.where(positive: false).count || 0
+            }
+        }
+        end
 
         post_json = {
             id: @post.id,
@@ -124,31 +141,15 @@ class PostsController < ApplicationController
             community_id: @post.community_id,
             created_at: @post.created_at,
             updated_at: @post.updated_at,
-            comments: @post.comments.count,
+            comments: comments_json,
             likes: {
-                             positive: @post.post_likes.where(positive: true).count || 0,
-                             negative: @post.post_likes.where(positive: false).count || 0
-                           }
-          }
-
-        comments_json = @post.comments.map do |comment|
-          comment_json = {
-              id: comment.id,
-              body: comment.body,
-              post_id: comment.post_id,
-              user_id: comment.user_id,
-              created_at: comment.created_at,
-              updated_at: comment.updated_at,
-              replies: comment.replies.count,
-              likes: {
-                positive: comment.comment_likes.where(positive: true).count || 0,
-                negative: comment.comment_likes.where(positive: false).count || 0
-              }
+                positive: @post.post_likes.where(positive: true).count || 0,
+                negative: @post.post_likes.where(positive: false).count || 0
             }
-        end
+        }
 
-        render json: { comment: comment_json, replies: replies_json }, status: :ok
-      end
+        render json: { post: post_json }, status: :ok
+    end
 
 
 
@@ -164,35 +165,35 @@ class PostsController < ApplicationController
     end
 
 
-    # POST /posts/1/edit
-      def update
+    # PUT /posts/1
+    def update
         @post = Post.find(params[:id])
 
         if @post.update(post_params)
-          render json: {
-            message: 'Post updated successfully',
-            post: {
-              id: @post.id,
-              title: @post.title,
-              url: @post.url,
-              body: @post.body,
-              user_id: @post.user_id,
-              community_id: @post.community_id,
-              created_at: @post.created_at,
-              updated_at: @post.updated_at,
-              comments: @post.comments.count,
-              likes: {
-                               positive: @post.post_likes.where(positive: true).count || 0,
-                               negative: @post.post_likes.where(positive: false).count || 0
-                             }
-            }
-          }, status: :ok
+            render json: {
+                message: 'Post updated successfully',
+                post: {
+                    id: @post.id,
+                    title: @post.title,
+                    url: @post.url,
+                    body: @post.body,
+                    user_id: @post.user_id,
+                    community_id: @post.community_id,
+                    created_at: @post.created_at,
+                    updated_at: @post.updated_at,
+                    num_comments: @post.comments.count,
+                    likes: {
+                        positive: @post.post_likes.where(positive: true).count || 0,
+                        negative: @post.post_likes.where(positive: false).count || 0
+                    }
+                }
+            }, status: :ok
         else
-          render json: {
+            render json: {
             errors: @post.errors.full_messages
-          }, status: :unprocessable_entity
+            }, status: :unprocessable_entity
         end
-      end
+    end
 
 
 

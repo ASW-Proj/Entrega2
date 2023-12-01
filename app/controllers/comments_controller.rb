@@ -67,9 +67,10 @@ class CommentsController < ApplicationController
         body: comment.body,
         post_id: comment.post_id,
         user_id: comment.user_id,
+        parent_id: comment.parent_id,
         created_at: comment.created_at,
         updated_at: comment.updated_at,
-        replies: comment.replies.count,
+        num_replies: comment.replies.count,
         likes: {
                          positive: comment.comment_likes.where(positive: true).count || 0,
                          negative: comment.comment_likes.where(positive: false).count || 0
@@ -109,7 +110,7 @@ def create
         user_id: @comment.user_id,
         created_at: @comment.created_at,
         updated_at: @comment.updated_at,
-        replies: @comment.replies.count,
+        num_replies: @comment.replies.count,
         likes: {
           positive: @comment.comment_likes.where(positive: true).count || 0,
           negative: @comment.comment_likes.where(positive: false).count || 0
@@ -136,7 +137,7 @@ def show
     user_id: @comment.user_id,
     created_at: @comment.created_at,
     updated_at: @comment.updated_at,
-    replies: @comment.replies.count,
+    num_replies: @comment.replies.count,
     likes: {
       positive: @comment.comment_likes.where(positive: true).count || 0,
       negative: @comment.comment_likes.where(positive: false).count || 0
@@ -173,7 +174,7 @@ def destroy
 end
 
 
-# POST /comments/1/edit
+# PUT /comments/1
   def update
     @comment = Comment.find(params[:id])
 
@@ -187,7 +188,7 @@ end
           user_id: @comment.user_id,
           created_at: @comment.created_at,
           updated_at: @comment.updated_at,
-          replies: @comment.replies.count,
+          num_replies: @comment.replies.count,
           likes: {
             positive: @comment.comment_likes.where(positive: true).count || 0,
             negative: @comment.comment_likes.where(positive: false).count || 0

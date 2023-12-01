@@ -7,14 +7,14 @@ Rails.application.routes.draw do
 
     # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
     # Can be used by load balancers and uptime monitors to verify that the app is live.
-    get "up" => "rails/health#show", as: :rails_health_check # No esborrar
+    get "up" => "rails/health#show", as: :rails_health_check
 
     # Communities
     get "/communities", to: "communities#index"
     post "/communities", to: "communities#create"
     get "/communities/:id", to: "communities#show"
     delete "/communities/:id", to: "communities#destroy"
-    post '/communities/:id/edit', to: 'communities#update'
+    put '/communities/:id', to: 'communities#update'
 
 
     # Posts
@@ -22,14 +22,14 @@ Rails.application.routes.draw do
     post "/posts", to: "posts#create"
     get "/posts/:id", to: "posts#show"
     delete "/posts/:id", to: "posts#destroy"
-    post '/posts/:id/edit', to: 'posts#update'
+    put '/posts/:id', to: 'posts#update'
 
     # Users
     get "/users", to: "users#index"
     post "/users", to: "users#create"
     get "/users/:id", to: "users#show"
     delete "/users/:id", to: "users#destroy"
-    post '/users/:id/edit', to: 'users#update'
+    put '/users/:id', to: 'users#update'
 
   
     #Comments
@@ -37,7 +37,7 @@ Rails.application.routes.draw do
     post "/comments", to: "comments#create"
     get "/comments/:id", to: "comments#show"
     delete "/comments/:id", to: "comments#destroy"
-    post '/comments/:id/edit', to: 'comments#update'
+    put '/comments/:id', to: 'comments#update'
   
     # Subscriptions
     post "/community/:community_id/subscribe/:user_id", to: "subscriptions#subscribe"
