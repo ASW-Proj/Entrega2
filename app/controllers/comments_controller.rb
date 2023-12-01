@@ -88,11 +88,6 @@ class CommentsController < ApplicationController
 
 
 
-  # GET /comments/1 or /comments/1.json
-  def show
-    @comment = Comment.find(params[:id])
-  end
-
 
   # GET /comments/new
   def new
@@ -168,17 +163,16 @@ def show
   render json: { comment: comment_json, replies: replies_json }, status: :ok
 end
 
+# DELETE /comments/1
+def destroy
+  @comment = Comment.find(params[:id])
 
-
-
-
-
-
-
-
-
-
-
+  if @comment.destroy
+    render json: { message: 'Comment deleted successfully' }, status: :ok
+  else
+    render json: { errors: @comment.errors.full_messages }, status: :unprocessable_entity
+  end
+end
 
 
   # Only allow a list of trusted parameters through.
@@ -190,8 +184,5 @@ end
     #end
   end
 
-  def likes
-    comment.comment_likes.where(positive: true) - comment.comment_likes.where(positive: false)
-  end
 
 end

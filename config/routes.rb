@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     get "/comments/:order", to: "comments#index"
     post "/comments", to: "comments#create"
     get "/comments/:id", to: "comments#show"
+    delete "/comments/:id", to: "comments#destroy"
   
     # Subscriptions
     post "/community/:community_id/subscribe/:user_id", to: "subscriptions#subscribe"
