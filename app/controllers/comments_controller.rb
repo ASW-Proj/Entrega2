@@ -71,9 +71,9 @@ class CommentsController < ApplicationController
         updated_at: comment.updated_at,
         replies: comment.replies.count,
         likes: {
-          positive: comment.positive_likes_count || 0,
-          negative: comment.negative_likes_count || 0
-        }
+                         positive: comment.comment_likes.where(positive: true).count || 0,
+                         negative: comment.comment_likes.where(positive: false).count || 0
+                       }
       }
     end
 
@@ -119,9 +119,9 @@ def create
            updated_at: comment.updated_at,
            replies: comment.replies.count,
            likes: {
-             positive: comment.positive_likes_count || 0,
-             negative: comment.negative_likes_count || 0
-           }
+                 positive: comment.comment_likes.where(positive: true).count || 0,
+                 negative: comment.comment_likes.where(positive: false).count || 0
+               }
          }
         }, status: :created
     else
@@ -146,8 +146,8 @@ def show
     updated_at: @comment.updated_at,
     replies: @comment.replies.count,
     likes: {
-      positive: @comment.positive_likes_count || 0,
-      negative: @comment.negative_likes_count || 0
+      positive: @comment.comment_likes.where(positive: true).count || 0,
+      negative: @comment.comment_likes.where(positive: false).count || 0
     }
   }
 
@@ -159,9 +159,9 @@ def show
       created_at: reply.created_at,
       updated_at: reply.updated_at,
       likes: {
-        positive: reply.positive_likes_count || 0,
-        negative: reply.negative_likes_count || 0
-      }
+            positive: reply.comment_likes.where(positive: true).count || 0,
+            negative: reply.comment_likes.where(positive: false).count || 0
+          }
     }
   end
 
@@ -169,17 +169,16 @@ def show
 end
 
 
+# DELETE /comments/1
+def destroy
+  @comment = Comment.find(params[:id])
 
-
-
-
-
-
-
-
-
-
-
+  if @comment.destroy
+    render json: { message: 'Comment deleted successfully' }, status: :ok
+  else
+    render json: { errors: @comment.errors.full_messages }, status: :unprocessable_entity
+  end
+end
 
   # Only allow a list of trusted parameters through.
   def comment_params
