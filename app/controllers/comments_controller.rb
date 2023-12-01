@@ -169,6 +169,17 @@ def show
 end
 
 
+# DELETE /comments/1
+def destroy
+  @comment = Comment.find(params[:id])
+
+  if @comment.destroy
+    render json: { message: 'Comment deleted successfully' }, status: :ok
+  else
+    render json: { errors: @comment.errors.full_messages }, status: :unprocessable_entity
+  end
+end
+
   # Only allow a list of trusted parameters through.
   def comment_params
     #if current_user != nil
