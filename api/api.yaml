@@ -56,7 +56,6 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request
-      # Security requirements for future endpoints
       security:
         - bearerAuth: []
 
