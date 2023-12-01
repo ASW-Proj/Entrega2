@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   
     # Subscriptions
     post "/community/:community_id/subscribe/:user_id", to: "subscriptions#subscribe"
-    delete "/community/:community_id/unsubscribe/:user_id", to: "subscriptions#unsubscribe"
+    delete "/community/:community_id/subscribe/:user_id", to: "subscriptions#unsubscribe" #He cambiado subscribe por unsubscribe para la cohesion
 
     # Saved posts
     post "/post/:post_id/save/:user_id", to: "saved_posts#save"
