@@ -59,7 +59,8 @@ class UsersController < ApplicationController
                 bio: @user.bio,
                 email: @user.email,
                 created_at: @user.created_at,
-                updated_at: @user.updated_at
+                updated_at: @user.updated_at,
+                api_key: @user.api_key
               }
 
             }, status: :created
