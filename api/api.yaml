@@ -48,9 +48,6 @@ paths:
           description: Communities not found
         '400':
           description: Bad Request
-      # Security requirements for future endpoints
-      #security:
-       # - BearerAuth: []
 
     post:
       tags:
@@ -73,9 +70,9 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request
-      # Security requirements for future endpoints
-      # security:
-      #   - BearerAuth: []
+      security:
+        - bearerAuth: []
+
   
   /posts:
     post:
@@ -100,9 +97,8 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request
-      # Security requirements for future endpoints
-      # security:
-      #   - BearerAuth: []
+      security:
+        - bearerAuth: []
       
     get:
       tags: 
@@ -140,6 +136,7 @@ paths:
           description: Users not found
         '400':
           description: Bad Request
+
   /users:
     get:
       tags: 
@@ -163,9 +160,6 @@ paths:
           description: Users not found
         '400':
           description: Bad Request
-      # Security requirements for future endpoints
-      # security:
-      #   - BearerAuth: []
 
     post:
       tags: 
@@ -188,9 +182,8 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request
-      # Security requirements for future endpoints
-      # security:
-      #   - BearerAuth: []
+      security:
+        - bearerAuth: []
       
       
   /users/{id}: 
@@ -248,9 +241,8 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request
-      # Security requirements for future endpoints
-      # security:
-      #   - BearerAuth: []
+      security:
+        - bearerAuth: []
       
     get:
       tags:
@@ -270,7 +262,7 @@ paths:
               - oldest 
               - mostcommented
               - likes
-       responses:
+      responses:
         '200':
           description: List of comments
           content:
@@ -302,7 +294,8 @@ paths:
           description: Action has been accepted and queued
         '400':
           description: Bad request
-        
+      security:
+        - bearerAuth: []  
       
   /comments/{id}/edit: 
     post:
@@ -328,10 +321,9 @@ paths:
           description: Comment edited succesfully
         '400':
           description: Bad request
+      security:
+        - bearerAuth: []
     
-    
- 
- 
   /community/{community_id}/subscribe/{user_id}:
     post:
       tags:
@@ -358,7 +350,9 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request 
-          
+      security:
+        - bearerAuth: []
+
     delete:
       tags:
         - communities
@@ -383,7 +377,9 @@ paths:
         '401':
           description: Unauthorized
         '400':
-          description: Bad Request 
+          description: Bad Request
+      security:
+        - bearerAuth: []
 
   /posts/{post_id}/save/{user_id}:
     post:
@@ -411,6 +407,8 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request 
+      security:
+        - bearerAuth: []
           
     delete:
       tags:
@@ -437,6 +435,8 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request 
+      security:
+        - bearerAuth: []
           
   /comment/{comment_id}/save/{user_id}:
     post:
@@ -464,6 +464,8 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request 
+      security:
+        - bearerAuth: []
           
     delete:
       tags:
@@ -490,6 +492,8 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request 
+      security:
+        - bearerAuth: []
     
   /post/{post_id}/like/{user_id}:
     post:
@@ -517,6 +521,8 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request 
+      security:
+        - bearerAuth: []
           
     delete:
       tags:
@@ -543,6 +549,8 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request
+      security:
+        - bearerAuth: []
   
   /comment/{comment_id}/like/{user_id}:
     post:
@@ -570,6 +578,8 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request 
+      security:
+        - bearerAuth: []
           
     delete:
       tags:
@@ -596,6 +606,8 @@ paths:
           description: Unauthorized
         '400':
           description: Bad Request 
+      security:
+        - bearerAuth: []
   
 components:
   schemas:
@@ -858,8 +870,8 @@ components:
           type: string
           format: date-time
 
-#securitySchemes:
-#  BearerAuth:
-#    type: http
-#    scheme: bearer
-#    bearerFormat: JWT
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
