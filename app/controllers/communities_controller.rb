@@ -34,7 +34,7 @@ class CommunitiesController < ApplicationController
         render json: { communities: communities_json }, status: :ok
     end
 
-    # GET /communities/id
+    # GET /communities/1
     def show
         @community= Community.find(params[:id])
         if !@community.nil?
@@ -45,6 +45,7 @@ class CommunitiesController < ApplicationController
                     identifier: @community.identifier,
                     name: @community.name,
                     community_avatar: @community.community_avatar.attached? ? url_for(@community.community_avatar) : nil,
+                    community_banner: @community.community_banner.attached? ? url_for(@community.community_banner) : nil,
                     num_posts: @community.posts.count,
                     num_comments: @community.comments.count,
                     num_subscribers: @community.subscriptions.count,
@@ -125,7 +126,7 @@ class CommunitiesController < ApplicationController
     end
 
 
-    # POST /posts/1/edit
+    # PUT /posts/1
       def update
         @community = Community.find(params[:id])
 
@@ -148,11 +149,11 @@ class CommunitiesController < ApplicationController
       end
       
      # DELETE /communities/1
-        def destroy
-          @community = Community.find(params[:id])
+    def destroy
+        @community = Community.find(params[:id])
 
         if @community.destroy
-            render json: { message: 'Post deleted successfully' }, status: :ok
+            render json: { message: 'Community deleted successfully' }, status: :ok
         else
             render json: { errors: @community.errors.full_messages }, status: :unprocessable_entity
         end

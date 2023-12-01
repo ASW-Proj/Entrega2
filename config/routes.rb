@@ -7,14 +7,14 @@ Rails.application.routes.draw do
 
     # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
     # Can be used by load balancers and uptime monitors to verify that the app is live.
-    get "up" => "rails/health#show", as: :rails_health_check # No esborrar
+    get "up" => "rails/health#show", as: :rails_health_check
 
     # Communities
     get "/communities", to: "communities#index"
     post "/communities", to: "communities#create"
     get "/communities/:id", to: "communities#show"
     delete "/communities/:id", to: "communities#destroy"
-    post '/communities/:id/edit', to: 'communities#update'
+    put '/communities/:id', to: 'communities#update'
 
 
     # Posts
@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     post "/posts", to: "posts#create"
     get "/posts/:id", to: "posts#show"
     delete "/posts/:id", to: "posts#destroy"
-    post '/posts/:id/edit', to: 'posts#update'
+    put '/posts/:id', to: 'posts#update'
 
     # Users
     get "/users", to: "users#index"
