@@ -130,11 +130,7 @@ paths:
           description: Bad request
       security:
         - bearerAuth: []
-        
-        
-  
-  /communities/{id}/edit:
-    post:
+    put:
       tags:
         - communities
       summary: edit a community
@@ -281,9 +277,7 @@ paths:
           description: Bad request
       security:
         - bearerAuth: []
-        
-  /posts/{id}/edit:
-    post:
+    put:
       tags:
         - posts
       summary: edit a post
@@ -411,8 +405,8 @@ paths:
           description: Unauthorized
         '404':
           description: Users not found
-  /users/{id}/edit:        
-    post:
+         
+    put:
       tags:
         - users
       summary: edit a user
@@ -551,8 +545,7 @@ paths:
           description: Bad request
       security:
         - bearerAuth: []
-  /comments/{id}/edit:
-    post:
+    put:
       tags:
         - comments
       summary: Edit a single comment
