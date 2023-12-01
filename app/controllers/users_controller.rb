@@ -71,6 +71,20 @@ class UsersController < ApplicationController
         end
     end
 
+
+
+    # DELETE /users/1
+        def destroy
+          @user = User.find(params[:id])
+
+          if @user.destroy
+            render json: { message: 'User deleted successfully' }, status: :ok
+          else
+            render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+          end
+        end
+
+
     private
         # Only allow a list of trusted parameters through.
         def user_params
