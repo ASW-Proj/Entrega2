@@ -1,15 +1,16 @@
+
 openapi: 3.0.1
 info:
   version: 1.0.0
   title: p·d programming.dev API
   description: |-
-    API for our programming.dev app.
+   API for our programming.dev app.
+  
 
-
-     
-     Some useful links:
-     - [Nuestro GitHub](https://github.com/ASW-Proj/Entrega2/tree/main)
-     - [Nuestro proyecto en Taiga](https://tree.taiga.io/project/mcampsll-asw-project/backlog)
+    
+    Some useful links:
+    - [Nuestro GitHub](https://github.com/ASW-Proj/Entrega2/tree/main)
+    - [Nuestro proyecto en Taiga](https://tree.taiga.io/project/mcampsll-asw-project/backlog)
 servers:
   - url: http://127.0.0.1:3000
 paths:
@@ -21,6 +22,7 @@ paths:
           description: Application is up
         '500':
           description: Application is down or encountering an error
+
   /communities:
     get:
       tags:
@@ -40,12 +42,13 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Community'
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
         '404':
           description: Communities not found
+        '400':
+          description: Bad Request
+
     post:
       tags:
         - communities
@@ -63,105 +66,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Community'
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
-      security:
-        - bearerAuth: []
-  /communities/{id}:
-    get:
-      tags:
-        - communities
-      summary: show a community
-      description: Check a list of the given community's posts.
-      parameters:
-        - name: id
-          in: path
-          description: Identifier of the comment we want to edit
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Information of the community
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  communities:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Post'
         '400':
           description: Bad Request
-        '401':
-          description: Unauthorized
-        '404':
-          description: Users not found
-    delete:
-      tags:
-        - communities
-      summary: Delete a community
-      description: >-
-        If the logged user has permission, deletes the community with the given
-        id.
-      parameters:
-        - name: id
-          in: path
-          description: Identifier of the community we want to delete
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Community deleted succesfully
-        '202':
-          description: Action has been accepted and queued
-        '400':
-          description: Bad request
       security:
         - bearerAuth: []
-        
-        
+
   
-  /communities/{id}/edit:
-    post:
-      tags:
-        - communities
-      summary: edit a community
-      description: Edit certain values of a community
-      parameters:
-        - name: id
-          in: path
-          description: Identifier of the comment we want to edit
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Community'
-      responses:
-        '200':
-          description: Community edited successfully
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '404':
-          description: Users not found
   /posts:
     post:
       tags:
         - posts
       summary: Create a new post
-      description: >-
-        As a logged user, create a new post giving the parameters indicated
-        below
+      description: As a logged user, create a new post giving the parameters indicated below
       requestBody:
         required: true
         content:
@@ -175,28 +93,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Post'
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request
       security:
         - bearerAuth: []
+      
     get:
-      tags:
+      tags: 
         - posts
       summary: Returns a list of posts
       description: Gets the list of all existing posts. Can be sorted several ways
-      parameters:
+      parameters: 
         - name: order
           in: query
           description: Selects the order in which posts will be displayed
           required: true
-          schema:
+          schema: 
             type: string
             default: recent
-            enum:
+            enum: 
               - recent
-              - oldest
+              - oldest 
               - mostcommented
               - likes
       responses:
@@ -211,102 +130,16 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Post'
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
         '404':
           description: Users not found
-  
-  
+        '400':
+          description: Bad Request
 
-          
-  /posts/{id}:
-    get:
-      tags:
-        - posts
-      summary: show a post
-      description: Check a list of the given community's posts.
-      parameters:
-        - name: id
-          in: path
-          description: Identifier of the post we want to see
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Information of the community
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  communities:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Post'
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '404':
-          description: Users not found
-    delete:
-      tags:
-        - posts
-      summary: Delete a post
-      description: If the logged user has permission, deletes the community with the given
-        id.
-      parameters:
-        - name: id
-          in: path
-          description: Identifier of the post we want to delete
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: post deleted succesfully
-        '202':
-          description: Action has been accepted and queued
-        '400':
-          description: Bad request
-      security:
-        - bearerAuth: []
-        
-  /posts/{id}/edit:
-    post:
-      tags:
-        - posts
-      summary: edit a post
-      description: Replace a post's old info with the given one
-      parameters:
-        - name: id
-          in: path
-          description: Identifier of the post we want to see
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Post'
-      responses:
-        '201':
-          description: Post edited sucessfully. 
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '404':
-          description: Users not found
-      
   /users:
     get:
-      tags:
+      tags: 
         - users
       summary: Get all users
       responses:
@@ -321,14 +154,15 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/User'
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
         '404':
           description: Users not found
+        '400':
+          description: Bad Request
+
     post:
-      tags:
+      tags: 
         - users
       summary: Create a new user
       requestBody:
@@ -344,28 +178,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request
+      #no deberia tener token pero es para que funcione
       security:
         - bearerAuth: []
-  /users/{id}:
+      
+      
+  /users/{id}: 
     get:
-      tags:
+      tags: 
         - users
-      summary: show a user 
-      description: View the profile of a certain user
+      summary: View the profile of a certain user
       parameters:
-        - name: id
+        - name: id 
           in: path
-          description: Identifier of the user we want to check
+          description: Identifier of the logged user
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: Returns the information of the logged user
+          description: Returns the information of the logged user 
           content:
             application/json:
               schema:
@@ -375,64 +211,15 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/User'
-        '400':
-          description: Bad Request
+                      
         '401':
           description: Unauthorized
         '404':
           description: Users not found
-    delete: 
-      tags: 
-        - users
-      summary: delete a user
-      description: If authorized, delete the user with the given id
-      parameters: 
-        - name: id
-          in: path
-          description: Identifier of the user we want to delete
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200': 
-          description: user deleted sucessfully
         '400':
           description: Bad Request
-        '401':
-          description: Unauthorized
-        '404':
-          description: Users not found
-  /users/{id}/edit:        
-    post:
-      tags:
-        - users
-      summary: edit a user
-      description: Replace a user's old info with the given one
-      parameters:
-        - name: id
-          in: path
-          description: Identifier of the user we want to see
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        '201':
-          description: User edited sucessfully. 
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '404':
-          description: Users not found      
-  
-  
-  
+    
+    
   /comments:
     post:
       tags:
@@ -443,36 +230,37 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/Comment'
       responses:
         '201':
           description: User created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Bad Request
+                $ref: '#/components/schemas/Comment'
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request
       security:
         - bearerAuth: []
+      
     get:
       tags:
         - comments
       summary: View a list of comments
-      description: Returns all the parameters of all comments, according to an order.
-      parameters:
+      description: Returns all the parameters of all comments, according to an order. 
+      parameters: 
         - name: order
           in: query
           description: Selects the order in which posts will be displayed
           required: true
-          schema:
+          schema: 
             type: string
             default: recent
-            enum:
+            enum: 
               - recent
-              - oldest
+              - oldest 
               - mostcommented
               - likes
       responses:
@@ -487,148 +275,113 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Comment'
-  
-  /comments/{id}: 
-    get: 
-      tags:
-        - comments
-      summary: show a comment
-      description: Get the information of a comment
-      parameters:
-        - name: id
-          in: path
-          description: Identifier of the comment we want to show
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Returns the information of the logged user
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  users:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/User'
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '404':
-          description: Users not found
+          
     delete:
       tags:
         - comments
       summary: Delete a comment
-      description: >-
-        If the logged user has permission, deletes the comment with the given
-        id.
-      parameters:
+      description: If the logged user has permission, deletes the comment with the given id. 
+      parameters: 
         - name: id
           in: path
           description: Identifier of the comment we want to delete
           required: true
-          schema:
+          schema: 
             type: integer
       responses:
-        '200':
+        '200': 
           description: Comment deleted succesfully
         '202':
           description: Action has been accepted and queued
         '400':
           description: Bad request
       security:
-        - bearerAuth: []
-  /comments/{id}/edit:
+        - bearerAuth: []  
+      
+  /comments/{id}/edit: 
     post:
       tags:
         - comments
       summary: Edit a single comment
-      description: >-
-        If the logged user has permission, edits the parameters of a comment
-        with given id.
-      parameters:
+      description: If the logged user has permission, edits the parameters of a comment with given id. 
+      parameters: 
         - name: id
           in: path
           description: Identifier of the comment we want to edit
           required: true
-          schema:
+          schema: 
             type: integer
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/Comment'
       responses:
-        '200':
+        '200': 
           description: Comment edited succesfully
         '400':
           description: Bad request
       security:
         - bearerAuth: []
+    
   /community/{community_id}/subscribe/{user_id}:
     post:
       tags:
         - communities
       summary: Subscribe a user to a certain community
-      description: >-
-        Establishes a subscription link between a certain user and a certain
-        community.
+      description: Establishes a subscription link between a certain user and a certain community.
       parameters:
-        - name: community_id
+        - name: community_id 
           in: path
           description: Identifier of the community
           required: true
           schema:
             type: integer
-        - name: user_id
+        - name: user_id 
           in: path
           description: Identifier of the user
           required: true
           schema:
             type: integer
-      responses:
+      responses: 
         '201':
           description: Subscribed succesfully
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request 
       security:
         - bearerAuth: []
+
     delete:
       tags:
         - communities
       summary: Unsubscribe a user to a certain community
-      description: >-
-        Removes the subscription link between a certain user and a certain
-        community.
+      description: Removes the subscription link between a certain user and a certain community.
       parameters:
-        - name: community_id
+        - name: community_id 
           in: path
           description: Identifier of the community
           required: true
           schema:
             type: integer
-        - name: user_id
+        - name: user_id 
           in: path
           description: Identifier of the user subscribed to community_id
           required: true
           schema:
             type: integer
-      responses:
+      responses: 
         '201':
           description: Unsubscribed succesfully
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request
       security:
         - bearerAuth: []
+
   /posts/{post_id}/save/{user_id}:
     post:
       tags:
@@ -636,54 +389,56 @@ paths:
       summary: Save a post
       description: Establishes a saved link between a certain user and a certain post.
       parameters:
-        - name: post_id
+        - name: post_id 
           in: path
           description: Identifier of the community
           required: true
           schema:
             type: integer
-        - name: user_id
+        - name: user_id 
           in: path
           description: Identifier of the user
           required: true
           schema:
             type: integer
-      responses:
+      responses: 
         '201':
           description: Saved succesfully
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request 
       security:
         - bearerAuth: []
+          
     delete:
       tags:
         - posts
       summary: Un-saves a post
       description: Removes a post from the user's saved list.
       parameters:
-        - name: post_id
+        - name: post_id 
           in: path
           description: Identifier of the post
           required: true
           schema:
             type: integer
-        - name: user_id
+        - name: user_id 
           in: path
           description: Identifier of the user
           required: true
           schema:
             type: integer
-      responses:
+      responses: 
         '201':
           description: Removed save succesfully
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request 
       security:
         - bearerAuth: []
+          
   /comment/{comment_id}/save/{user_id}:
     post:
       tags:
@@ -691,113 +446,113 @@ paths:
       summary: Save a comment
       description: Establishes a saved link between a certain user and a certain comment.
       parameters:
-        - name: comment_id
+        - name: comment_id 
           in: path
           description: Identifier of the comment
           required: true
           schema:
             type: integer
-        - name: user_id
+        - name: user_id 
           in: path
           description: Identifier of the user
           required: true
           schema:
             type: integer
-      responses:
+      responses: 
         '201':
           description: Saved succesfully
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request 
       security:
         - bearerAuth: []
+          
     delete:
       tags:
         - comments
       summary: Un-saves a comment
       description: Removes a comment from the user's saved list.
       parameters:
-        - name: comment_id
+        - name: comment_id 
           in: path
           description: Identifier of the post
           required: true
           schema:
             type: integer
-        - name: user_id
+        - name: user_id 
           in: path
           description: Identifier of the user
           required: true
           schema:
             type: integer
-      responses:
+      responses: 
         '201':
           description: Removed save succesfully
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request 
       security:
         - bearerAuth: []
+    
   /post/{post_id}/like/{user_id}:
     post:
       tags:
         - posts
       summary: Like or un-like a post
-      description: >-
-        If the user hadn't liked the post before, he likes it. If he had already
-        liked it, the like is removes.
+      description: If the user hadn't liked the post before, he likes it. If he had already liked it, the like is removes. 
       parameters:
-        - name: post_id
+        - name: post_id 
           in: path
           description: Identifier of the post
           required: true
           schema:
             type: integer
-        - name: user_id
+        - name: user_id 
           in: path
           description: Identifier of the user
           required: true
           schema:
             type: integer
-      responses:
+      responses: 
         '201':
           description: Un/Liked succesfully
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request 
       security:
         - bearerAuth: []
+          
     delete:
       tags:
         - posts
       summary: Dislike or un-dislike a post
-      description: >-
-        If the user hadn't disliked the post before, he dislikes it. If he had
-        already disliked it, the dislike is removes.
+      description: If the user hadn't disliked the post before, he dislikes it. If he had already disliked it, the dislike is removes. 
       parameters:
-        - name: post_id
+        - name: post_id 
           in: path
           description: Identifier of the post
           required: true
           schema:
             type: integer
-        - name: user_id
+        - name: user_id 
           in: path
           description: Identifier of the user
           required: true
           schema:
             type: integer
-      responses:
+      responses: 
         '201':
           description: Removed save succesfully
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request
       security:
         - bearerAuth: []
+  
   /comment/{comment_id}/like/{user_id}:
     post:
       tags:
@@ -805,54 +560,56 @@ paths:
       summary: Like button
       description: Likes or removes the like of a comment
       parameters:
-        - name: comment_id
+        - name: comment_id 
           in: path
           description: Identifier of the comment
           required: true
           schema:
             type: integer
-        - name: user_id
+        - name: user_id 
           in: path
           description: Identifier of the user
           required: true
           schema:
             type: integer
-      responses:
+      responses: 
         '201':
           description: Saved succesfully
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request 
       security:
         - bearerAuth: []
+          
     delete:
       tags:
         - comments
       summary: Dislike button
-      description: Adds or removes a dislike of a comment
+      description: Adds or removes a dislike of a comment 
       parameters:
-        - name: comment_id
+        - name: comment_id 
           in: path
           description: Identifier of the post
           required: true
           schema:
             type: integer
-        - name: user_id
+        - name: user_id 
           in: path
           description: Identifier of the user
           required: true
           schema:
             type: integer
-      responses:
+      responses: 
         '201':
           description: Removed save succesfully
-        '400':
-          description: Bad Request
         '401':
           description: Unauthorized
+        '400':
+          description: Bad Request 
       security:
         - bearerAuth: []
+  
 components:
   schemas:
     ActiveStorageAttachment:
@@ -877,6 +634,7 @@ components:
         created_at:
           type: string
           format: date-time
+
     ActiveStorageBlob:
       type: object
       required:
@@ -905,6 +663,7 @@ components:
         created_at:
           type: string
           format: date-time
+
     ActiveStorageVariantRecord:
       type: object
       required:
@@ -917,6 +676,7 @@ components:
           type: integer
         variation_digest:
           type: string
+
     CommentLike:
       type: object
       required:
@@ -940,6 +700,7 @@ components:
         updated_at:
           type: string
           format: date-time
+
     Comment:
       type: object
       required:
@@ -968,6 +729,7 @@ components:
           type: integer
         parent_id:
           type: integer
+
     Community:
       type: object
       required:
@@ -988,20 +750,21 @@ components:
         updated_at:
           type: string
           format: date-time
-    User:
+    
+    User: 
       type: object
-      required:
+      required: 
         - id
         - username
         - email
-        - created_at
-        - updated_at
-      properties:
+        - created_at 
+        - updated_at 
+      properties: 
         id:
           type: integer
         username:
           type: string
-        bio:
+        bio: 
           type: string
         email:
           type: string
@@ -1011,6 +774,7 @@ components:
         updated_at:
           type: string
           format: date-time
+          
     PostLike:
       type: object
       required:
@@ -1034,6 +798,7 @@ components:
         updated_at:
           type: string
           format: date-time
+
     Post:
       type: object
       required:
@@ -1061,6 +826,7 @@ components:
           type: integer
         community_id:
           type: integer
+
     SavedComment:
       type: object
       required:
@@ -1081,6 +847,8 @@ components:
         updated_at:
           type: string
           format: date-time
+
+        
     SavedPost:
       type: object
       required:
@@ -1101,8 +869,9 @@ components:
         updated_at:
           type: string
           format: date-time
-securitySchemes:
-  bearerAuth:
-    type: http
-    scheme: bearer
-    bearerFormat: JWT
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

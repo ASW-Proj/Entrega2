@@ -66,21 +66,29 @@ class PostsController < ApplicationController
 
         # Ordenamos los posts
         if params[:order].present?
-            order = params[:order]
-            case order
-                when 'recent'
-                    @posts = @posts.order(created_at: :desc)
-                when 'oldest'
-                    @posts = @posts.order(created_at: :asc)
-                when 'mostcommented'
-                    @posts = @posts.order('posts.comments.count DESC')
-                when 'likes'
-                    @posts = @posts.select('posts.*, COUNT(CASE WHEN post_likes.positive THEN 1 ELSE NULL END) AS positive_likes_count, COUNT(CASE WHEN NOT post_likes.positive THEN 1 ELSE NULL END) AS negative_likes_count')
-                                .joins('LEFT JOIN post_likes ON post_likes.post_id = posts.id')
-                                .group('posts.id')
-                                .order('positive_likes_count DESC, negative_likes_count ASC')
 
-            end
+      
+          order = params[:order]
+          case order
+          when 'recent'
+            @posts = @posts.order(created_at: :desc)
+          when 'oldest'
+            @posts = @posts.order(created_at: :asc)
+          when 'mostcommented'
+            @posts = @posts
+              .joins(:comments)
+              .group('posts.id') # Ensure each post is only counted once
+              .order('COUNT(comments.id) DESC')
+
+          when 'likes'
+            @posts = @posts
+              .select('posts.*, COUNT(CASE WHEN post_likes.positive THEN 1 ELSE NULL END) AS positive_likes_count, COUNT(CASE WHEN NOT post_likes.positive THEN 1 ELSE NULL END) AS negative_likes_count')
+              .joins('LEFT JOIN post_likes ON post_likes.post_id = posts.id')
+              .group('posts.id')
+              .order('positive_likes_count DESC, negative_likes_count ASC')
+
+          end
+
         end
 
         posts_json = @posts.map do |post| {
