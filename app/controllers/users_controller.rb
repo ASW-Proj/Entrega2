@@ -32,6 +32,8 @@ class UsersController < ApplicationController
           username: @user.username,
           name: @user.name,
           bio: @user.bio,
+          user_avatar: @user.user_avatar.attached? ? url_for(@user.user_avatar) : nil,
+          user_banner: @user.user_banner.attached? ? url_for(@user.user_banner) : nil,
           created_at: @user.created_at,
           updated_at: @user.updated_at
         }
@@ -87,7 +89,7 @@ class UsersController < ApplicationController
 
 
 
-# POST /users/1/edit
+# PUT /users/1
       def update
         @user = current_user
 

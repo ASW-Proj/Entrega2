@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     post "/users", to: "users#create"
     get "/users/:id", to: "users#show"
     delete "/users/:id", to: "users#destroy"
-    post '/users/:id/edit', to: 'users#update'
+    put '/users/:id', to: 'users#update'
 
   
     #Comments
@@ -37,7 +37,7 @@ Rails.application.routes.draw do
     post "/comments", to: "comments#create"
     get "/comments/:id", to: "comments#show"
     delete "/comments/:id", to: "comments#destroy"
-    post '/comments/:id/edit', to: 'comments#update'
+    put '/comments/:id', to: 'comments#update'
   
     # Subscriptions
     post "/community/:community_id/subscribe/:user_id", to: "subscriptions#subscribe"
