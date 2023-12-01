@@ -84,6 +84,21 @@ class CommunitiesController < ApplicationController
         end
     end
 
+
+     # DELETE /communities/1
+        def destroy
+          @community = Community.find(params[:id])
+
+          if @community.destroy
+            render json: { message: 'Post deleted successfully' }, status: :ok
+          else
+            render json: { errors: @community.errors.full_messages }, status: :unprocessable_entity
+          end
+        end
+
+
+
+
     private
         def authenticate_user
             token = extract_token_from_request

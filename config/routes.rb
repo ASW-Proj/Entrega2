@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     get "/communities", to: "communities#index"
     post "/communities", to: "communities#create"
     get "/communities/:id", to: "communities#show"
+    delete "/communities/:id", to: "communities#destroy"
 
     # Posts
     get "/posts", to: "posts#index"
