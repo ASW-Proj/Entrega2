@@ -1,4 +1,9 @@
-class CommunitiesController < ApplicationController
+class CommunitiesController < ApplicationController´
+
+
+      before_action :authenticate_user, if: -> { %w[post put delete].include?(request.method.downcase) }
+    attr_reader :current_user
+
 
     # GET /communities
     def index
@@ -99,7 +104,7 @@ class CommunitiesController < ApplicationController
             }, status: :not_found
         end
     end
-    
+
     # POST /communities
     def create
         # Creates an instance of community
@@ -146,7 +151,7 @@ class CommunitiesController < ApplicationController
           }, status: :unprocessable_entity
         end
       end
-      
+
      # DELETE /communities/1
         def destroy
           @community = Community.find(params[:id])
@@ -161,9 +166,28 @@ class CommunitiesController < ApplicationController
 
 
     private
-    
+
         # Only allow a list of trusted parameters through.
         def community_params
             params.require(:community).permit(:identifier, :name, :community_avatar, :community_banner)
+        end
+
+
+         def authenticate_user
+            token = extract_token_from_request
+            if token_valid?(token)
+                @current_user = User.find_by(api_key: token)
+            else
+                render json: { error: 'Unauthorized' }, status: :unauthorized
+            end
+        end
+
+        def extract_token_from_request
+            header = request.headers['Authorization']
+            header&.split(' ')&.last
+        end
+
+        def token_valid?(token)
+            !token.nil? && !token.empty? && User.exists?(api_key: token)
         end
 end
