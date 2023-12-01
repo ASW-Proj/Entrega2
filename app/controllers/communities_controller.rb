@@ -5,8 +5,8 @@ class CommunitiesController < ApplicationController
     def index
         # If a query param called user_id is present, obtain the communities
         # where the user with that user_id is subscribed (filter)
-        if params[:user_id].present?
-            user_id = params[:user_id]
+        if current_user?
+            user_id = current_user
             @communities = Community
                              .joins(:subscriptions)
                              .where(subscriptions: { user_id: user_id })
@@ -125,6 +125,28 @@ class CommunitiesController < ApplicationController
     end
 
 
+    # POST /posts/1/edit
+      def update
+        @community = Community.find(params[:id])
+
+        if @community.update(community_params)
+          render json: {
+            message: 'Community updated successfully',
+            community: {
+                id: @community.id,
+                identifier: @community.identifier,
+                name: @community.name,
+                created_at: @community.created_at,
+                updated_at: @community.updated_at
+            }
+          }, status: :ok
+        else
+          render json: {
+            errors: @community.errors.full_messages
+          }, status: :unprocessable_entity
+        end
+      end
+      
      # DELETE /communities/1
         def destroy
           @community = Community.find(params[:id])
@@ -135,7 +157,6 @@ class CommunitiesController < ApplicationController
             render json: { errors: @community.errors.full_messages }, status: :unprocessable_entity
           end
         end
-
 
 
 
