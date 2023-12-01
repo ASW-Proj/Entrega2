@@ -35,7 +35,30 @@ class CommunitiesController < ApplicationController
         render json: { communities: communities_json }, status: :ok
     end
 
-
+    # GET /communities/id
+    def show
+        @community= Community.find(params[:id])
+        if !@community.nil?
+            render json: {
+                message: 'Community info',
+                community: {
+                    id: @community.id,
+                    identifier: @community.identifier,
+                    name: @community.name,
+                    community_avatar: @community.community_avatar.attached? ? url_for(@community.community_avatar) : nil,
+                    num_posts: @community.posts.count,
+                    num_comments: @community.comments.count,
+                    num_subscribers: @community.subscriptions.count,
+                    created_at: @community.created_at,
+                    updated_at: @community.updated_at,
+                }
+            }, status: :ok
+        else
+            render json: {
+                errors: @community.errors.full_messages
+            }, status: :not_found
+        end
+    end
     
     # POST /communities
     def create
@@ -62,22 +85,21 @@ class CommunitiesController < ApplicationController
     end
 
     private
-    def authenticate_user
-        token = extract_token_from_request
-    
-        unless token_valid?(token)
-          render json: { error: 'Unauthorized' }, status: :unauthorized
+        def authenticate_user
+            token = extract_token_from_request
+            unless token_valid?(token)
+            render json: { error: 'Unauthorized' }, status: :unauthorized
+            end
         end
-      end
-    
-      def extract_token_from_request
-        header = request.headers['Authorization']
-        header&.split(' ')&.last # Tomar la parte del token después de 'Bearer'
-      end
-    
-      def token_valid?(token)
-        !token.nil? && !token.empty? && User.exists?(api_key: token)
-      end
+        
+        def extract_token_from_request
+            header = request.headers['Authorization']
+            header&.split(' ')&.last # Tomar la parte del token después de 'Bearer'
+        end
+        
+        def token_valid?(token)
+            !token.nil? && !token.empty? && User.exists?(api_key: token)
+        end
         # Only allow a list of trusted parameters through.
         def community_params
             params.require(:community).permit(:identifier, :name, :community_avatar, :community_banner)
