@@ -87,13 +87,6 @@ class CommentsController < ApplicationController
     end
 
 
-
-  # GET /comments/1 or /comments/1.json
-  def show
-    @comment = Comment.find(params[:id])
-  end
-
-
   # GET /comments/new
   def new
     @comment = Comment.new
