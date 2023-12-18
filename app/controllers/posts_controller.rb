@@ -6,26 +6,33 @@ class PostsController < ApplicationController
     def create
         # Creates an instance of post
         @post = Post.new(post_params)
-        # Save it in DB
-        if @post.save
-            render json: {
-                message: 'Post created successfully',
-                post: {
-                    id: @post.id,
-                    title: @post.title,
-                    url: @post.url,
-                    body: @post.body,
-                    creator_id: @post.user.id,
-                    community_id: @post.community.id,
-                    created_at: @post.created_at,
-                    updated_at: @post.updated_at
-                }
-            }, status: :created
-        else
-            render json: {
-                errors: @post.errors.full_messages
-            }, status: :unprocessable_entity
+
+        if @current_user != nil
+          @post.user_id = @current_user.id
+        elsif api_key.nil?
+          render :json => { "status" => "401", "error" => "No Api key provided." }, status: :unauthorized and return
         end
+        # Save it in DB
+          if @post.save
+              render json: {
+                  message: 'Post created successfully',
+                  post: {
+                      id: @post.id,
+                      title: @post.title,
+                      url: @post.url,
+                      body: @post.body,
+                      creator_id: @post.user_id,
+                      community_id: @post.community.id,
+                      created_at: @post.created_at,
+                      updated_at: @post.updated_at
+                  }
+              }, status: :created
+          else
+              render json: {
+                  errors: @post.errors.full_messages
+              }, status: :unprocessable_entity
+              end
+
     end
 
     # GET /posts or /posts.json
@@ -40,30 +47,20 @@ class PostsController < ApplicationController
 
         # Filtramos los posts
         if params[:filter].present?
-            if params[:user_id].present?
-                user_id = params[:user_id]
                 subs = params[:filter]
                 case subs
                     when 'subscribed'
                         @posts = Post.joins(:community, community: :subscriptions)
-                                     .where(subscriptions: { user_id: user_id })
+                                     .where(subscriptions: { user_id: @current_user.id})
                                      .order('posts.created_at DESC')
                     when 'created'
-                        @posts = Post.where( user_id: user_id )
+                        @posts = Post.where( user_id: @current_user )
                                      .order('posts.created_at DESC')
                     when 'saved'
                         @posts = Post.joins(:saved_posts)
-                                     .where(saved_posts: { user_id: user_id })
+                                     .where(saved_posts: { user_id: @current_user.id })
                                      .order('posts.created_at DESC')
                 end
-
-            else
-                #si no hay user id no podemos hacer ninguno de los filtros
-                render json: {
-                    errors: "Mismatch user_id"
-                }, status: :unprocessable_entity
-                return
-            end
         end
 
         # Ordenamos los posts
@@ -158,11 +155,14 @@ class PostsController < ApplicationController
     # DELETE /posts/1
     def destroy
       @post = Post.find(params[:id])
-
-      if @post.destroy
-        render json: { message: 'Post deleted successfully' }, status: :ok
+      if @post.user_id == @current_user.id
+        if @post.destroy
+          render json: { message: 'Post deleted successfully' }, status: :ok
+        else
+          render json: { errors: @post.errors.full_messages }, status: :unprocessable_entity
+        end
       else
-        render json: { errors: @post.errors.full_messages }, status: :unprocessable_entity
+        render json: { message: 'This user is not the creator' }, status: :unprocessable_entity
       end
     end
 
@@ -199,11 +199,10 @@ class PostsController < ApplicationController
 
 
 
-
     private
         # Only allow a list of trusted parameters through.
         def post_params
-            params.require(:post).permit(:title, :url, :body, :user_id, :community_id)
+            params.require(:post).permit(:title, :url, :body, :community_id)
         end
 
 
