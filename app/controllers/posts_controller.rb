@@ -97,6 +97,7 @@ class PostsController < ApplicationController
             url: post.url,
             body: post.body,
             user_id: post.user_id,
+            user_avatar: User.find(post.user_id).user_avatar.attached? ? url_for( User.find(post.user_id).user_avatar) : nil,
             community_id: post.community_id,
             created_at: post.created_at,
             updated_at: post.updated_at,
@@ -237,4 +238,5 @@ class PostsController < ApplicationController
             @current_user = User.find_by(api_key: token)
           end
         end
+
 end
