@@ -40,7 +40,7 @@ Rails.application.routes.draw do
     put '/comments/:id', to: 'comments#update'
   
     # Subscriptions
-    post "/community/:community_id/subscribe/:user_id", to: "subscriptions#subscribe"
+    post "/community/:community_id/subscribe", to: "subscriptions#subscribe"
     delete "/community/:community_id/subscribe/:user_id", to: "subscriptions#unsubscribe" #He cambiado subscribe por unsubscribe para la cohesion
 
     # Saved posts
@@ -57,8 +57,8 @@ Rails.application.routes.draw do
     delete "/post/:post_id/like/:user_id", to: "post_likes#unlike"
 
     # Liked comments
-    post "/comment/:comment_id/like/:user_id", to: "comment_likes#like"
-    delete "/comment/:comment_id/like/:user_id", to: "comment_likes#unlike"
+    post "/comment/:comment_id/like", to: "comment_likes#like"
+    delete "/comment/:comment_id/like", to: "comment_likes#unlike"
 
 
 end

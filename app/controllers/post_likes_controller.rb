@@ -6,7 +6,7 @@ class PostLikesController < ApplicationController
 
     # POST /post/:post_id/like/:user_id
     def like
-        if post.post_likes.find_by(user: user).nil?
+        if post.post_likes.find_by(user: @current_user).nil?
             @liked_post = PostLike.new(post: post, user: user, positive: positive)
 
             if @liked_post.save
@@ -22,7 +22,7 @@ class PostLikesController < ApplicationController
                 }, status: :unprocessable_entity
             end
         else
-            @liked_post = post.post_likes.find_by(user: user)
+            @liked_post = post.post_likes.find_by(user: @current_user)
 
             if @liked_post.update(positive: positive)
                 render json: {
@@ -41,7 +41,7 @@ class PostLikesController < ApplicationController
 
     # DELETE /post/:post_id/like/:user_id
     def unlike
-        @liked_post = post.post_likes.find_by(user: user)
+        @liked_post = post.post_likes.find_by(user: @current_user)
 
         if !@liked_post.nil?
             @liked_post.destroy!
@@ -62,6 +62,7 @@ class PostLikesController < ApplicationController
 
     # User getter
     def user
+        authenticate_user
         @user ||= User.find(params[:user_id])
     end
 

@@ -4,8 +4,11 @@ class SubscriptionsController < ApplicationController
 
     # POST /community/:community_id/subscribe/:user_id
     def subscribe
-        @subscription = Subscription.new(community: community, user: user)
-
+        if @current_user != nil
+            @subscription = Subscription.new(community: community, user: @current_user)
+        elsif api_key.nil?
+            render :json => { "status" => "401", "error" => "No Api key provided." }, status: :unauthorized and return
+        end
         if @subscription.save
             render json: {
                 message: 'Subscribed successfully',
@@ -21,7 +24,7 @@ class SubscriptionsController < ApplicationController
 
     # DELETE /community/:community_id/unsubscribe/:user_id
     def unsubscribe
-        @subscription = community.subscriptions.find_by(user: user)
+        @subscription = community.subscriptions.find_by(user:@current_user)
 
         if !@subscription.nil?
             @subscription.destroy!

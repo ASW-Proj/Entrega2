@@ -102,7 +102,11 @@ class CommentsController < ApplicationController
 def create
   # Creates an instance of comment
   @comment = Comment.new(comment_params)
-
+  if @current_user != nil
+    @comment.user_id = @current_user.id
+  elsif api_key.nil?
+    render :json => { "status" => "401", "error" => "No Api key provided." }, status: :unauthorized and return
+  end
   # Save it in DB
   if @comment.save
     render json: {
@@ -169,51 +173,52 @@ end
 # DELETE /comments/1
 def destroy
   @comment = Comment.find(params[:id])
-
-  if @comment.destroy
-    render json: { message: 'Comment deleted successfully' }, status: :ok
+  if @comment.user_id == @current_user.id
+    if @comment.destroy
+      render json: { message: 'Comment deleted successfully' }, status: :ok
+    else
+      render json: { errors: @comment.errors.full_messages }, status: :unprocessable_entity
+    end
   else
-    render json: { errors: @comment.errors.full_messages }, status: :unprocessable_entity
+    render json: { message: 'This user is not the creator' }, status: :unprocessable_entity
+
   end
+
 end
 
 
 # PUT /comments/1
   def update
     @comment = Comment.find(params[:id])
-
-    if @comment.update(comment_params)
-      render json: {
-        message: 'Comment updated successfully',
-        comment: {
-          id: @comment.id,
-          body: @comment.body,
-          post_id: @comment.post_id,
-          user_id: @comment.user_id,
-          created_at: @comment.created_at,
-          updated_at: @comment.updated_at,
-          num_replies: @comment.replies.count,
-          likes: {
-            positive: @comment.comment_likes.where(positive: true).count || 0,
-            negative: @comment.comment_likes.where(positive: false).count || 0
+    if @comment.user_id == @current_user.id
+      if @comment.update(comment_params)
+        render json: {
+          message: 'Comment updated successfully',
+          comment: {
+            id: @comment.id,
+            body: @comment.body,
+            post_id: @comment.post_id,
+            user_id: @comment.user_id,
+            created_at: @comment.created_at,
+            updated_at: @comment.updated_at,
+            num_replies: @comment.replies.count,
+            likes: {
+              positive: @comment.comment_likes.where(positive: true).count || 0,
+              negative: @comment.comment_likes.where(positive: false).count || 0
+            }
           }
-        }
-      }, status: :ok
-    else
-      render json: {
-        errors: @comment.errors.full_messages
-      }, status: :unprocessable_entity
-    end
+        }, status: :ok
+      else
+        render json: {
+          errors: @comment.errors.full_messages
+        }, status: :unprocessable_entity
+      end
+  else
+    render json: { message: 'This user is not the creator' }, status: :unprocessable_entity
+  end
   end
 
-  # Only allow a list of trusted parameters through.
-  def comment_params
-    #if current_user != nil
-     # params.require(:comment).permit(:body, :user_id, :post_id, :parent_id, :community_id)
-    #else
-      params.require(:comment).permit(:body, :user_id,  :post_id, :parent_id, :community_id)
-    #end
-  end
+
 
   def likes
     comment.comment_likes.where(positive: true) - comment.comment_likes.where(positive: false)
@@ -240,7 +245,7 @@ end
         end
 
         def comment_params
-            params.require(:comment).permit(:body, :user_id,  :post_id, :parent_id, :community_id)
+            params.require(:comment).permit(:body,  :post_id, :parent_id, :community_id)
         end
 
 end
