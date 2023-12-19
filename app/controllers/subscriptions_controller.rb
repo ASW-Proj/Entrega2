@@ -24,7 +24,7 @@ class SubscriptionsController < ApplicationController
 
     # DELETE /community/:community_id/unsubscribe/:user_id
     def unsubscribe
-        @subscription = community.subscriptions.find_by(user: user)
+        @subscription = community.subscriptions.find_by(user:@current_user)
 
         if !@subscription.nil?
             @subscription.destroy!
