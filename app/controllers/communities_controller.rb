@@ -5,8 +5,9 @@ class CommunitiesController < ApplicationController
     def index
         # If a query param called user_id is present, obtain the communities
         # where the user with that user_id is subscribed (filter)
-        if params[:user_id].present?
-            user_id = params[:user_id]
+        authenticate_user2
+        if @current_user
+            user_id = @current_user
             @communities = Community
                              .joins(:subscriptions)
                              .where(subscriptions: { user_id: user_id })
@@ -15,21 +16,21 @@ class CommunitiesController < ApplicationController
         else
             @communities = Community.all.order(name: :asc)
         end
-
-        # The json to add to the response
-        communities_json = @communities.map do |community|
-            {
-                id: community.id,
-                identifier: community.identifier,
-                name: community.name,
-                community_avatar: community.community_avatar.attached? ? url_for(community.community_avatar) : nil,
-                num_posts: community.posts.count,
-                num_comments: community.comments.count,
-                num_subscribers: community.subscriptions.count,
-                created_at: community.created_at,
-                updated_at: community.updated_at,
-            }
-        end
+            # The json to add to the response
+            communities_json = @communities.map do |community|
+                {
+                    id: community.id,
+                    identifier: community.identifier,
+                    name: community.name,
+                    community_avatar: community.community_avatar.attached? ? url_for(community.community_avatar) : nil,
+                    num_posts: community.posts.count,
+                    num_comments: community.comments.count,
+                    num_subscribers: community.subscriptions.count,
+                    subscribed: @current_user.present? ,#&& community.subscriptions.where(user: @current_user).exists?,
+                    created_at: community.created_at,
+                    updated_at: community.updated_at,
+                }
+                end
 
         # The response
         render json: { communities: communities_json }, status: :ok
@@ -172,6 +173,13 @@ class CommunitiesController < ApplicationController
         end
     end
 
+    def authenticate_user2
+        token = extract_token_from_request
+        if token_valid?(token)
+            @current_user = User.find_by(api_key: token)
+        end
+    end
+
     def extract_token_from_request
         header = request.headers['Authorization']
         header&.split(' ')&.last
@@ -185,4 +193,7 @@ class CommunitiesController < ApplicationController
         def community_params
             params.require(:community).permit(:identifier, :name, :community_avatar, :community_banner)
         end
+
+
+
 end
