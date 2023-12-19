@@ -38,6 +38,7 @@ class PostsController < ApplicationController
     # GET /posts or /posts.json
     def index
         @posts = Post.all
+        authenticate_user2
 
         # Buscamos los posts por title
         if params[:search].present?
@@ -102,8 +103,11 @@ class PostsController < ApplicationController
             num_comments: post.comments.count,
             likes: {
                 positive: post.post_likes.where(positive: true).count || 0,
-                negative: post.post_likes.where(positive: false).count || 0
+                negative: post.post_likes.where(positive: false).count || 0,
+                user_like: @current_user ? post.post_likes.where(user: @current_user, positive: true).exists? : nil
             }
+
+
         }
         end
 
@@ -226,5 +230,11 @@ class PostsController < ApplicationController
 
         def token_valid?(token)
             !token.nil? && !token.empty? && User.exists?(api_key: token)
+        end
+        def authenticate_user2
+          token = extract_token_from_request
+          if token_valid?(token)
+            @current_user = User.find_by(api_key: token)
+          end
         end
 end

@@ -57,8 +57,8 @@ Rails.application.routes.draw do
     delete "/post/:post_id/like/:user_id", to: "post_likes#unlike"
 
     # Liked comments
-    post "/comment/:comment_id/like/:user_id", to: "comment_likes#like"
-    delete "/comment/:comment_id/like/:user_id", to: "comment_likes#unlike"
+    post "/comment/:comment_id/like", to: "comment_likes#like"
+    delete "/comment/:comment_id/like", to: "comment_likes#unlike"
 
 
 end
