@@ -170,8 +170,8 @@ class PostsController < ApplicationController
     # PUT /posts/1
     def update
         @post = Post.find(params[:id])
-
-        if @post.update(post_params)
+        if @post.user_id == @current_user.id
+          if @post.update(post_params)
             render json: {
                 message: 'Post updated successfully',
                 post: {
@@ -190,10 +190,13 @@ class PostsController < ApplicationController
                     }
                 }
             }, status: :ok
+          else
+              render json: {
+              errors: @post.errors.full_messages
+              }, status: :unprocessable_entity
+          end
         else
-            render json: {
-            errors: @post.errors.full_messages
-            }, status: :unprocessable_entity
+          render json: { message: 'This user is not the creator' }, status: :unprocessable_entity
         end
     end
 
