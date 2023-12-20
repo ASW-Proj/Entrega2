@@ -16,8 +16,8 @@ class CommentsController < ApplicationController
 
     # Filtramos los comentarios
     if params[:filter].present?
-        if params[:user_id].present?
-          user_id = params[:user_id]
+        if @current_user
+          user_id = @current_user
           subs = params[:filter]
           case subs
           when 'subscribed'
@@ -32,12 +32,6 @@ class CommentsController < ApplicationController
                              .where(saved_comments: { user_id: user_id })
                              .order('comments.created_at DESC')
           end
-        else
-        #si no hay user id no podemos hacer ninguno de los filtros
-          render json: {
-            errors: "Mismatch user_id"
-          }, status: :unprocessable_entity
-          return
         end
     end
 
@@ -70,15 +64,25 @@ class CommentsController < ApplicationController
         id: comment.id,
         body: comment.body,
         post_id: comment.post_id,
+        post_title: Post.find(comment.post_id).title,
+        community_id: Post.find(comment.post_id).community_id,
+        community_name: Community.find(Post.find(comment.post_id).community_id).name,
+        community_avatar: Community.find(Post.find(comment.post_id).community_id).community_avatar.attached? ? url_for(Community.find(Post.find(comment.post_id).community_id).community_avatar) : nil,
         user_id: comment.user_id,
+        user_name: User.find(comment.user_id).username ,
+        user_avatar: User.find(comment.user_id).user_avatar.attached? ? url_for( User.find(comment.user_id).user_avatar) : nil,
+
+        user_saved: (@current_user && SavedComment.find_by(comment_id: comment.id, user_id: @current_user.id).present? )? true : false,
         parent_id: comment.parent_id,
         created_at: comment.created_at,
         updated_at: comment.updated_at,
         num_replies: comment.replies.count,
         likes: {
                          positive: comment.comment_likes.where(positive: true).count || 0,
-                         negative: comment.comment_likes.where(positive: false).count || 0
-                       }
+                         negative: comment.comment_likes.where(positive: false).count || 0,
+                         user_like: @current_user ? comment.comment_likes.where(user: @current_user, positive: true).exists? : nil
+
+        }
       }
     end
 
@@ -102,6 +106,7 @@ class CommentsController < ApplicationController
 def create
   # Creates an instance of comment
   @comment = Comment.new(comment_params)
+  @comment.community_id = Post.find(@comment.post_id).community_id
   if @current_user != nil
     @comment.user_id = @current_user.id
   elsif api_key.nil?
@@ -245,7 +250,7 @@ end
         end
 
         def comment_params
-            params.require(:comment).permit(:body,  :post_id, :parent_id, :community_id)
+            params.require(:comment).permit(:body,  :post_id, :parent_id)
         end
 
 end

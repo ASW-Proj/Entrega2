@@ -4,8 +4,8 @@ class CommentLikesController < ApplicationController
 
     # POST /comment/:comment_id/like/:user_id
     def like
-        if comment.comment_likes.find_by(user: user).nil?
-            @liked_comment = CommentLike.new(comment: comment, user: user, positive: positive)
+        if comment.comment_likes.find_by(user: @current_user).nil?
+            @liked_comment = CommentLike.new(comment: comment, user: @current_user, positive: positive)
 
             if @liked_comment.save
                 render json: {
@@ -20,7 +20,7 @@ class CommentLikesController < ApplicationController
                 }, status: :unprocessable_entity
             end
         else
-            @liked_comment = comment.comment_likes.find_by(user: user)
+            @liked_comment = comment.comment_likes.find_by(user: @current_user)
 
             if @liked_comment.update(positive: positive)
                 render json: {
@@ -39,7 +39,7 @@ class CommentLikesController < ApplicationController
 
     # DELETE /comment/:comment_id/like/:user_id
     def unlike
-        @liked_comment = comment.comment_likes.find_by(user: user)
+        @liked_comment = comment.comment_likes.find_by(user: @current_user)
 
         if !@liked_comment.nil?
             @liked_comment.destroy!
