@@ -48,6 +48,7 @@ class PostsController < ApplicationController
 
         # Filtramos los posts
         if params[:filter].present?
+          if @current_user
                 subs = params[:filter]
                 case subs
                     when 'subscribed'
@@ -62,6 +63,7 @@ class PostsController < ApplicationController
                                      .where(saved_posts: { user_id: @current_user.id })
                                      .order('posts.created_at DESC')
                 end
+          end
         end
 
         # Ordenamos los posts

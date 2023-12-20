@@ -26,7 +26,7 @@ class CommunitiesController < ApplicationController
                     num_posts: community.posts.count,
                     num_comments: community.comments.count,
                     num_subscribers: community.subscriptions.count,
-                    subscribed: @current_user.present? ,#&& community.subscriptions.where(user: @current_user).exists?,
+                    subscribed: (@current_user && community.subscriptions.where(user: @current_user).exists?) ? true : false,
                     created_at: community.created_at,
                     updated_at: community.updated_at,
                 }
@@ -53,6 +53,7 @@ class CommunitiesController < ApplicationController
                     num_subscribers: @community.subscriptions.count,
                     created_at: @community.created_at,
                     updated_at: @community.updated_at,
+                    subscribed: (@current_user && community.subscriptions.where(user: @current_user).exists?) ? true : false,,
                 }
             }, status: :ok
             if params[:content].present?

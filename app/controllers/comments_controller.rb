@@ -16,8 +16,8 @@ class CommentsController < ApplicationController
 
     # Filtramos los comentarios
     if params[:filter].present?
-        if params[:user_id].present?
-          user_id = params[:user_id]
+        if @current_user
+          user_id = @current_user
           subs = params[:filter]
           case subs
           when 'subscribed'
@@ -32,12 +32,6 @@ class CommentsController < ApplicationController
                              .where(saved_comments: { user_id: user_id })
                              .order('comments.created_at DESC')
           end
-        else
-        #si no hay user id no podemos hacer ninguno de los filtros
-          render json: {
-            errors: "Mismatch user_id"
-          }, status: :unprocessable_entity
-          return
         end
     end
 
