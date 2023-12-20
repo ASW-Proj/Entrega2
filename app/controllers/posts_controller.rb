@@ -99,7 +99,7 @@ class PostsController < ApplicationController
             user_id: post.user_id,
             user_name: User.find(post.user_id).username ,
             user_avatar: User.find(post.user_id).user_avatar.attached? ? url_for( User.find(post.user_id).user_avatar) : nil,
-            user_saved: SavedPost.find_by(post_id: post.id, user_id: @current_user.id).present? ? true : false,
+            user_saved:  (@current_user && SavedPost.find_by(post_id: post.id, user_id: @current_user.id).present?) ? true : false,
             community_id: post.community_id,
             community_name: Community.find(post.community_id).name,
             community_avatar: Community.find(post.community_id).community_avatar.attached? ? url_for( Community.find(post.community_id).community_avatar) : nil,
