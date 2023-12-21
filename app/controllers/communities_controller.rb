@@ -40,22 +40,7 @@ class CommunitiesController < ApplicationController
     def show
         @community= Community.find(params[:id])
         if !@community.nil?
-            render json: {
-                message: 'Community info',
-                community: {
-                    id: @community.id,
-                    identifier: @community.identifier,
-                    name: @community.name,
-                    community_avatar: @community.community_avatar.attached? ? url_for(@community.community_avatar) : nil,
-                    community_banner: @community.community_banner.attached? ? url_for(@community.community_banner) : nil,
-                    num_posts: @community.posts.count,
-                    num_comments: @community.comments.count,
-                    num_subscribers: @community.subscriptions.count,
-                    created_at: @community.created_at,
-                    updated_at: @community.updated_at,
-                    subscribed: (@current_user && community.subscriptions.where(user: @current_user).exists?) ? true : false,,
-                }
-            }, status: :ok
+
             if params[:content].present?
                 content = params[:content]
                 case content
@@ -77,6 +62,27 @@ class CommunitiesController < ApplicationController
                             }
                         }
                     end
+
+
+                    render json: {
+                    message: 'Community info',
+                    community: {
+                        id: @community.id,
+                        identifier: @community.identifier,
+                        name: @community.name,
+                        community_avatar: @community.community_avatar.attached? ? url_for(@community.community_avatar) : nil,
+                        community_banner: @community.community_banner.attached? ? url_for(@community.community_banner) : nil,
+                        num_posts: @community.posts.count,
+                        num_comments: @community.comments.count,
+                        num_subscribers: @community.subscriptions.count,
+                        created_at: @community.created_at,
+                        updated_at: @community.updated_at,
+                        subscribed: (@current_user && community.subscriptions.where(user: @current_user).exists?) ? true : false,
+                        posts: posts_json
+                        }
+                    }, status: :ok
+
+
                     when 'comments'
                     comments_json = @community.comments.map do |comment|
                         comment_json = {
@@ -93,17 +99,53 @@ class CommunitiesController < ApplicationController
                             }
                         }
                     end
+
+                    render json: {
+                    message: 'Community info',
+                    community: {
+                        id: @community.id,
+                        identifier: @community.identifier,
+                        name: @community.name,
+                        community_avatar: @community.community_avatar.attached? ? url_for(@community.community_avatar) : nil,
+                        community_banner: @community.community_banner.attached? ? url_for(@community.community_banner) : nil,
+                        num_posts: @community.posts.count,
+                        num_comments: @community.comments.count,
+                        num_subscribers: @community.subscriptions.count,
+                        created_at: @community.created_at,
+                        updated_at: @community.updated_at,
+                        subscribed: (@current_user && community.subscriptions.where(user: @current_user).exists?) ? true : false,
+                        comments: comments_json
+                        }
+                    }, status: :ok
                 else
                 end
             else
+
+
             end
+            render json: {
+                message: 'Community info',
+                community: {
+                    id: @community.id,
+                    identifier: @community.identifier,
+                    name: @community.name,
+                    community_avatar: @community.community_avatar.attached? ? url_for(@community.community_avatar) : nil,
+                    community_banner: @community.community_banner.attached? ? url_for(@community.community_banner) : nil,
+                    num_posts: @community.posts.count,
+                    num_comments: @community.comments.count,
+                    num_subscribers: @community.subscriptions.count,
+                    created_at: @community.created_at,
+                    updated_at: @community.updated_at,
+                    subscribed: (@current_user && community.subscriptions.where(user: @current_user).exists?) ? true : false,
+                }
+            }, status: :ok
         else
             render json: {
                 errors: @community.errors.full_messages
             }, status: :not_found
         end
     end
-    
+
     # POST /communities
     def create
         # Creates an instance of community
@@ -150,7 +192,7 @@ class CommunitiesController < ApplicationController
           }, status: :unprocessable_entity
         end
       end
-      
+
      # DELETE /communities/1
         def destroy
           @community = Community.find(params[:id])

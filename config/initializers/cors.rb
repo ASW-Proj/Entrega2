@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins 'https://entrega2api.fly.dev'
+      origins 'https://entrega2-gb.fly.dev'
       resource '*', headers: :any, methods: [:get, :post, :patch, :put]
     end
   end

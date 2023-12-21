@@ -31,30 +31,30 @@ Rails.application.routes.draw do
     delete "/users/:id", to: "users#destroy"
     put '/users/:id', to: 'users#update'
 
-  
+
     #Comments
     get "/comments", to: "comments#index"
     post "/comments", to: "comments#create"
     get "/comments/:id", to: "comments#show"
     delete "/comments/:id", to: "comments#destroy"
     put '/comments/:id', to: 'comments#update'
-  
+
     # Subscriptions
     post "/community/:community_id/subscribe", to: "subscriptions#subscribe"
-    delete "/community/:community_id/subscribe/:user_id", to: "subscriptions#unsubscribe" #He cambiado subscribe por unsubscribe para la cohesion
+    delete "/community/:community_id/subscribe", to: "subscriptions#unsubscribe" #He cambiado subscribe por unsubscribe para la cohesion
 
     # Saved posts
-    post "/post/:post_id/save/:user_id", to: "saved_posts#save"
-    delete "/post/:post_id/save/:user_id", to: "saved_posts#unsave"
+    post "/post/:post_id/save", to: "saved_posts#save"
+    delete "/post/:post_id/save", to: "saved_posts#unsave"
 
 
     # Saved comments
-    post "/comment/:comment_id/save/:user_id", to: "saved_comments#save"
-    delete "/comment/:comment_id/save/:user_id", to: "saved_comments#unsave"
+    post "/comment/:comment_id/save", to: "saved_comments#save"
+    delete "/comment/:comment_id/save", to: "saved_comments#unsave"
 
     # Liked posts
-    post "/post/:post_id/like/:user_id", to: "post_likes#like"
-    delete "/post/:post_id/like/:user_id", to: "post_likes#unlike"
+    post "/post/:post_id/like", to: "post_likes#like"
+    delete "/post/:post_id/like", to: "post_likes#unlike"
 
     # Liked comments
     post "/comment/:comment_id/like", to: "comment_likes#like"
