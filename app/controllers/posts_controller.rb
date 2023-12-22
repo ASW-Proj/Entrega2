@@ -69,7 +69,7 @@ class PostsController < ApplicationController
         # Ordenamos los posts
         if params[:order].present?
 
-      
+
           order = params[:order]
           case order
           when 'recent'
@@ -148,14 +148,22 @@ class PostsController < ApplicationController
             url: @post.url,
             body: @post.body,
             user_id: @post.user_id,
+            user_name: User.find(@post.user_id).username ,
+            user_avatar: User.find(@post.user_id).user_avatar.attached? ? url_for( User.find(@post.user_id).user_avatar) : nil,
+            user_saved:  (@current_user && SavedPost.find_by(post_id: @post.id, user_id: @current_user.id).present?) ? true : false,
             community_id: @post.community_id,
+            community_name: Community.find(@post.community_id).name,
+            community_avatar: Community.find(@post.community_id).community_avatar.attached? ? url_for( Community.find(@post.community_id).community_avatar) : nil,
             created_at: @post.created_at,
             updated_at: @post.updated_at,
-            comments: comments_json,
+            num_comments: @post.comments.count,
             likes: {
                 positive: @post.post_likes.where(positive: true).count || 0,
-                negative: @post.post_likes.where(positive: false).count || 0
-            }
+                negative: @post.post_likes.where(positive: false).count || 0,
+                user_like: @current_user ? @post.post_likes.where(user: @current_user, positive: true).exists? : nil
+            },
+            comments: comments_json
+
         }
 
         render json: { post: post_json }, status: :ok

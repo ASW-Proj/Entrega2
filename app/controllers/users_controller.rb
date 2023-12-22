@@ -35,7 +35,8 @@ class UsersController < ApplicationController
           user_avatar: @user.user_avatar.attached? ? url_for(@user.user_avatar) : nil,
           user_banner: @user.user_banner.attached? ? url_for(@user.user_banner) : nil,
           created_at: @user.created_at,
-          updated_at: @user.updated_at
+          updated_at: @user.updated_at,
+          api_key: @user.api_key
         }
 
         render json: { user: user_json }, status: :ok
@@ -78,12 +79,13 @@ class UsersController < ApplicationController
 
     # DELETE /users/1
         def destroy
-          @user = current_user
+          if @user = @current_user
 
-          if @user.destroy
-            render json: { message: 'User deleted successfully' }, status: :ok
-          else
-            render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+            if @user.destroy
+              render json: { message: 'User deleted successfully' }, status: :ok
+            else
+              render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+            end
           end
         end
 
@@ -91,26 +93,27 @@ class UsersController < ApplicationController
 
 # PUT /users/1
       def update
-        @user = current_user
+        if @user = @current_user
 
-        if @user.update(user_params)
-          render json: {
-            message: 'User updated successfully',
-            user: {
-                id: @user.id,
-                username: @user.username,
-                name:  @user.name,
-                bio: @user.bio,
-                email: @user.email,
-                created_at: @user.created_at,
-                updated_at: @user.updated_at,
-                api_key: @user.api_key
-              }
-          }, status: :ok
-        else
-          render json: {
-            errors: @user.errors.full_messages
-          }, status: :unprocessable_entity
+          if @user.update(user_params)
+            render json: {
+              message: 'User updated successfully',
+              user: {
+                  id: @user.id,
+                  username: @user.username,
+                  name:  @user.name,
+                  bio: @user.bio,
+                  email: @user.email,
+                  created_at: @user.created_at,
+                  updated_at: @user.updated_at,
+                  api_key: @user.api_key
+                }
+            }, status: :ok
+          else
+            render json: {
+              errors: @user.errors.full_messages
+            }, status: :unprocessable_entity
+          end
         end
       end
 
