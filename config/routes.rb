@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     get "/users/:id", to: "users#show"
     delete "/users/:id", to: "users#destroy"
     put '/users/:id', to: 'users#update'
+    get "/user/:api_key", to: "users#showByToken"
 
 
     #Comments

@@ -12,9 +12,7 @@ class UsersController < ApplicationController
               bio: user.bio,
               created_at: user.created_at,
               updated_at: user.updated_at,
-              api_key: user.api_key
-
-
+              api_key: user.api_key,
             }
         end
 
@@ -26,6 +24,26 @@ class UsersController < ApplicationController
      # GET /users/:id
       def show
         @user = User.find(params[:id])
+
+        user_json = {
+          id: @user.id,
+          username: @user.username,
+          name: @user.name,
+          bio: @user.bio,
+          user_avatar: @user.user_avatar.attached? ? url_for(@user.user_avatar) : nil,
+          user_banner: @user.user_banner.attached? ? url_for(@user.user_banner) : nil,
+          created_at: @user.created_at,
+          updated_at: @user.updated_at,
+          api_key: @user.api_key
+        }
+
+        render json: { user: user_json }, status: :ok
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: 'User not found' }, status: :not_found
+      end
+
+      def showByToken
+        @user = User.find(params[:api_key])
 
         user_json = {
           id: @user.id,
